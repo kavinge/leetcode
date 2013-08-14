@@ -1,0 +1,49 @@
+/*
+Given an integer n, generate a square matrix filled with elements from 1 to n2 in spiral order.
+
+For example,
+Given n = 3,
+
+You should return the following matrix:
+[
+ [ 1, 2, 3 ],
+ [ 8, 9, 4 ],
+ [ 7, 6, 5 ]
+]
+*/
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<vector<int> > generateMatrix(int n) {
+    vector<vector<int> > matrix(n,vector<int>(n,0));
+    if(n==0) return matrix;
+    int v=1;
+    int level=(n+1)/2;
+    for(int l=0;l<level;l++){
+        int i;
+        for(i=l;i<=n-l-1;i++){
+            matrix[l][i]=v;
+            v++;
+        }
+        if((n-2*l)<2){
+            continue;
+        }
+        for(i=l+1;i<=n-l-1;i++){
+            matrix[i][n-l-1]=v;
+            v++;
+        }
+        for(i=n-l-2;i>=l;i--){
+            matrix[n-l-1][i]=v;
+            v++;
+        }
+        if((n-2*l)>2){
+            for(i=n-l-2;i>=l+1;i--){
+                matrix[i][l]=v;
+                v++;
+            }
+        }
+    }
+    return matrix;
+}
