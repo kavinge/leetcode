@@ -1,0 +1,88 @@
+/*
+Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is 1000, 
+and there exists one unique longest palindromic substring.
+*/
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+string longestPalindrome(string s) {
+    int n=s.size();
+    if(n==0){
+        return s;
+    }
+    string result;
+    int max=0;
+    int i,j;
+    int start=-1;
+    int end=-1;
+    for(i=0;i<n;i++){
+        //0--i
+        start=-1;
+        end=-1;
+        int left=0,right=i;
+        while(left<=right){
+            if(s[left]==s[right]){
+                if(start==-1){
+                    start=left;
+                    end=right;
+                }
+            }else{
+                start=-1;
+                end=-1;
+            }
+            left++;right--;
+        }
+
+
+        if(start!=-1){
+            if(max<(end-start+1)){
+                max=end-start+1;
+                result=s.substr(start,max);
+                cout<<result<<endl;
+            }
+        }
+
+    }
+
+    for(i=1;i<n;i++){
+        //i--n-1
+        start=-1;
+        end=-1;
+        if(n-i<=max){
+            break;
+        }
+        int left=i,right=n-1;
+        while(left<=right){
+            if(s[left]==s[right]){
+                if(start==-1){
+                    start=left;
+                    end=right;
+                }
+            }else{
+                start=-1;
+                end=-1;
+            }
+            left++;right--;
+        }
+        if(start!=-1){
+            if(max<(end-start+1)){
+                max=end-start+1;
+                result=s.substr(start,max);
+                cout<<result<<endl;
+            }
+        }
+    }
+
+    return result;
+
+}
+
+int main()
+{
+    string a="abb";
+
+    cout << longestPalindrome("eabcb") << endl;
+    return 0;
+}
