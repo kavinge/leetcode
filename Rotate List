@@ -1,0 +1,44 @@
+/*
+Given a list, rotate the list to the right by k places, where k is non-negative.
+
+For example:
+Given 1->2->3->4->5->NULL and k = 2,
+return 4->5->1->2->3->NULL.
+*/
+
+#include <iostream>
+
+using namespace std;
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+ListNode *rotateRight(ListNode *head, int k) {
+    int n=1;
+    if(head==NULL) return NULL;
+    if(k==0) return head;
+    ListNode *pre=NULL,*current=head,*last=head;
+
+    while(last->next!=NULL){
+        pre=current;
+        last=last->next;
+        current=current->next;
+        n++;
+        if(n==k){
+            pre=NULL;
+            current=head;
+        }
+    }
+    if(k>n){
+        return rotateRight(head,k%n);
+    }else{
+        if(pre!=NULL){
+            pre->next=NULL;
+            last->next=head;
+        }
+        return current;
+    }
+}
+
