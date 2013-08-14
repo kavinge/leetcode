@@ -1,0 +1,25 @@
+/*
+Implement int sqrt(int x).
+*/
+
+#include <iostream>
+
+using namespace std;
+
+int sqrt(int x) {
+    if(x==0) return 0;
+    double x0=1;
+    while(true){
+        x0=(x0*x0+x)/(2*x0);
+        int temp=(int)x0;
+        int check=x/temp;
+        if(check>=temp){
+            return temp;
+        }
+    }
+}
+int main()
+{
+    cout << sqrt(0) << endl;
+    return 0;
+}
