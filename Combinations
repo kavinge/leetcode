@@ -13,3 +13,41 @@ If n = 4 and k = 2, a solution is:
   [1,4],
 ]
 */
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<vector<int> > result;
+int count;
+int* select;
+void combineHelper(int n,int k,int i){
+    if(i>n||count>=k||(k-count)>(n-i)){
+        return;
+    }
+    for(int j=i;j<n;j++){
+        select[count++]=j+1;
+        if(count==k){
+            vector<int> temp;
+            for(int m=0;m<k;m++){
+                temp.push_back(select[m]);
+            }
+            result.push_back(temp);
+        }else{
+            combineHelper(n,k,j+1);
+        }
+        count--;
+    }
+}
+
+vector<vector<int> > combine(int n, int k) {
+    result.clear();
+    count=0;
+    if(k>n||n==0||k<=0){
+        return result;
+    }
+    select=new int[k]();
+    combineHelper(n,k,0);
+    return result;
+}
+
