@@ -1,0 +1,95 @@
+/*
+Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+*/
+
+#include <iostream>
+#include <vector>
+using namespace std;
+struct ListNode {
+    int val;
+     ListNode *next;
+     ListNode(int x) : val(x), next(NULL) {}
+};
+
+void adjust(vector<ListNode*> &array,int i,int n){
+    int j=2*i+1;
+    while(j<n){
+        if(j+1<n&&array[j+1]->val<array[j]->val){
+            j++;
+        }
+        if(array[i]->val>array[j]->val){
+            swap(array[i],array[j]);
+            i=j;
+            j=2*i+1;
+        }else{
+            break;
+        }
+    }
+}
+
+void build(vector<ListNode*> &array, int n){
+    for(int i=n/2-1;i>=0;i--){
+        adjust(array,i,n);
+    }
+}
+
+ListNode *mergeKLists(vector<ListNode *> &lists) {
+    ListNode *head=NULL;
+    ListNode *pre=NULL;
+    int n=lists.size();
+    if(n==0){
+        return NULL;
+    }
+    for(int i=n-1;i>=0;i--){
+        if(lists[i]==NULL){
+            if(i!=n-1){
+                swap(lists[i],lists[n-1]);
+            }
+            n--;
+        }
+    }
+    if(n<=0){
+        return NULL;
+    }
+    build(lists,n);
+    while(n>0){
+        if(lists[0]!=NULL){
+            if(head==NULL){
+                head=lists[0];
+                pre=lists[0];
+            }else{
+                pre->next=lists[0];
+                pre=pre->next;
+            }
+            lists[0]=lists[0]->next;
+            if(lists[0]==NULL){
+                swap(lists[0],lists[n-1]);
+                n--;
+            }
+            if(n>1){
+                adjust(lists,0,n);
+            }
+        }else{
+            break;
+        }
+    }
+    return head;
+}
+
+int main()
+{
+    vector<ListNode *> lists;
+    ListNode a(0);
+    ListNode b(2);
+    ListNode c(5);
+    a.next=&b;
+    b.next=&c;
+    lists.push_back(&a);
+    ListNode* head=mergeKLists(lists);
+    while(head!=NULL){
+        cout <<head->val<<endl;
+        head=head->next;
+    }
+    cout << "Hello world!" << endl;
+    return 0;
+}
