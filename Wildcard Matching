@@ -1,0 +1,80 @@
+/**
+Implement wildcard pattern matching with support for '?' and '*'.
+
+'?' Matches any single character.
+'*' Matches any sequence of characters (including the empty sequence).
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+isMatch("aa","a") ? false
+isMatch("aa","aa") ? true
+isMatch("aaa","aa") ? false
+isMatch("aa", "*") ? true
+isMatch("aa", "a*") ? true
+isMatch("ab", "?*") ? true
+isMatch("aab", "c*a*b") ? false
+**/
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+bool helper(const char *s,const char *p){
+    if(*s=='\0'){
+        while(*p!='\0'){
+            if(*p!='*') return false;
+            p++;
+        }
+        return true;
+    }
+    if(*s==*p||*p=='?') return helper(s+1,p+1);
+    if(*p=='*'){
+        int count=0;
+        while(s[count]!='\0'&&s[count]==p[1]){
+            count++;
+        }
+        return helper(s+count,p);
+    }else{
+        return false;
+    }
+}
+
+bool isMatch(const char *s, const char *p) {
+    const char *s_asterisk=NULL;
+    const char *p_asterisk=NULL;
+    while(*s!='\0'){
+        if(*s==*p||*p=='?'){
+            s++;p++;
+        }else if(*p=='*'){
+            p_asterisk=p;
+            s_asterisk=s;
+            p++;
+        }else{
+            if(p_asterisk!=NULL){
+                p=p_asterisk;
+                s=s_asterisk+1;
+                p_asterisk=NULL;
+                s_asterisk=NULL;
+            }else{
+                return false;
+            }
+        }
+    }
+    while(*p!='\0'){
+        if(*p!='*') return false;
+        p++;
+    }
+    return true;
+
+}
+
+int main()
+{
+
+    cout << isMatch("aa", "*aa*") << endl;
+    return 0;
+}
