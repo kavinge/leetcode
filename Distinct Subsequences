@@ -8,3 +8,54 @@ S = "rabbbit", T = "rabbit"
 
 Return 3.
 */
+
+#include <iostream>
+using namespace std;
+
+int helper(const string &S,const string &T,int i,int j){
+    int count=0;
+    int **matrix=new int *[i+1];
+    int k,l;
+    for(k=0;k<i+1;k++){
+        matrix[k]=new int[j+1]();
+    }
+    for(k=0;k<=i;k++){
+        matrix[k][0]=1;
+    }
+    for(k=1;k<=i;k++){
+        for(l=1;l<=j;l++){
+            int temp=matrix[k-1][l];
+            if(S[k-1]==T[l-1]){
+                temp+=matrix[k-1][l-1];
+            }
+            matrix[k][l]=temp;
+        }
+    }
+    count=matrix[i][j];
+    delete[] matrix;
+    return count;
+}
+
+int numDistinct(string S, string T) {
+    int ss=S.size();
+    int ts=T.size();
+    if(ss==0){
+        return 0;
+    }
+    if(ts==0){
+        return 1;
+    }
+    if(ss<ts){
+        return 0;
+    }
+    return helper(S,T,ss,ts);
+}
+
+int main()
+{
+    string S="a";
+    string T="b";
+
+    cout << numDistinct(S,T) << endl;
+    return 0;
+}
