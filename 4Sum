@@ -17,8 +17,8 @@ The solution set must not contain duplicate quadruplets.
 #include <vector>
 #include <algorithm>
 using namespace std;
-vector<vector<int> > threeSum(vector<int> &num,int target) {
 
+vector<vector<int> > threeSum(vector<int> &num,int target) {
     vector<vector<int> > result;
     if(num.size()<4){
         return result;
