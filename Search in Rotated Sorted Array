@@ -1,0 +1,37 @@
+/*
+Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+
+(i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+
+You are given a target value to search. If found in the array return its index, otherwise return -1.
+
+You may assume no duplicate exists in the array.
+*/
+
+#include <iostream>
+using namespace std;
+
+int helper(int A[],int left,int right,int target){
+     if(left>right) return -1;
+     int middle=(left+right)/2;
+     if(A[middle]==target){
+        return middle;
+     }else if(A[middle]>target){
+         if(A[left]>A[right]&&A[middle]>=A[left]&&target<=A[right]){
+                return helper(A,middle+1,right,target);
+         }else{
+            return helper(A,left,middle-1,target);
+         }
+     }else{
+        if(A[left]>A[right]&&A[middle]<=A[right]&&target>A[right]){
+            return helper(A,left,middle-1,target);
+        }else{
+            return helper(A,middle+1,right,target);
+        }
+     }
+}
+
+int search(int A[], int n, int target) {
+    if(n==0) return -1;
+    return helper(A,0,n-1,target);
+}
