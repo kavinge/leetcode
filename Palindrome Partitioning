@@ -1,0 +1,61 @@
+/*
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return all possible palindrome partitioning of s.
+
+For example, given s = "aab",
+Return
+
+  [
+    ["aa","b"],
+    ["a","a","b"]
+  ]
+  */
+  
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<vector<string> > result;
+
+bool isPalindrome(string &s,int left,int right){
+    while(left<right){
+        if(s[left++]!=s[right--]){
+            return false;
+        }
+    }
+    return true;
+}
+
+void dfs(int n,int index,string& s,vector<string>& current,int cuIndex){
+    for(int i=index;i<n;i++){
+        if(s[i]==s[index]&&isPalindrome(s,index,i)){
+            current.push_back(s.substr(index,i-index+1));
+            if(i==n-1){
+                result.push_back(current);
+            }else{
+                dfs(n,i+1,s,current,cuIndex+1);
+            }
+            current.erase(current.begin()+cuIndex);
+        }
+    }
+}
+
+vector<vector<string> > partition(string s) {
+    result.clear();
+    int n=s.size();
+    if(n==0){
+        return result;
+    }
+    vector<string> current;
+
+    dfs(n,0,s,current,0);
+    return result;
+}
+
+int main()
+{
+    partition("aaaaaaaaaabbbbbbbbb");
+    cout << "Hello world!" << endl;
+    return 0;
+}
