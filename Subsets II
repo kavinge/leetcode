@@ -1,0 +1,53 @@
+/*
+Given a collection of integers that might contain duplicates, S, return all possible subsets.
+
+Note:
+
+Elements in a subset must be in non-descending order.
+The solution set must not contain duplicate subsets.
+For example,
+If S = [1,2,2], a solution is:
+
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+*/
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector<vector<int> > result;
+
+void dfs(vector<int> &S,int n,int index,int count,vector<int> current){
+    if(count==0){
+        result.push_back(current);
+        return;
+    }
+    if(index+count>n) return;
+    for(int i=index;i<=n-count;i++){
+        if(i!=index&&S[i]==S[i-1]){
+            continue;
+        }
+        current.push_back(S[i]);
+        dfs(S,n,i+1,count-1,current);
+        current.pop_back();
+    }
+}
+
+vector<vector<int> > subsetsWithDup(vector<int> &S) {
+    result.clear();
+    int n=S.size();
+    sort(S.begin(),S.end());
+    for(int i=0;i<=n;i++){
+        vector<int> temp;
+        dfs(S,n,0,i,temp);
+    }
+    return result;
+}
