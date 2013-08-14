@@ -1,0 +1,62 @@
+/*
+
+Two elements of a binary search tree (BST) are swapped by mistake.
+
+Recover the tree without changing its structure.
+
+Note:
+A solution using O(n) space is pretty straight forward. Could you devise a constant space solution?
+confused what "{1,#,2,3}" means? > read more on how binary tree is serialized on OJ.
+
+*/
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+struct Pair{
+    TreeNode *pre;
+    TreeNode *sub;
+};
+
+vector<Pair> pairs;
+TreeNode *pre=NULL;
+
+void helper(TreeNode *root){
+    if(root==NULL) return;
+    helper(root->left);
+    if(pre!=NULL&&pre->val>root->val){
+        Pair p;p.pre=pre;p.sub=root;
+        pairs.push_back(p);
+    }
+    pre=root;
+    helper(root->right);
+}
+
+void recoverTree(TreeNode *root) {
+    pairs.clear();
+    pre=NULL;
+    helper(root);
+    int n=pairs.size();
+    if(n==1){
+        swap(pairs[0].pre->val,pairs[0].sub->val);
+    }else if(n==2){
+        swap(pairs[0].pre->val,pairs[1].sub->val);
+    }
+}
+
+int main()
+{
+    TreeNode n(0);
+    TreeNode n1(1);
+    n.left=&n1;
+    recoverTree(&n);
+    cout << "Hello world!" << endl;
+    return 0;
+}
