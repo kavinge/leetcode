@@ -1,0 +1,44 @@
+/*
+Implement strStr().
+
+Returns a pointer to the first occurrence of needle in haystack, or null if needle is not part of haystack.
+*/
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+char *strStr(char *haystack, char *needle) {
+    int l1=strlen(haystack);
+    int l2=strlen(needle);
+    if(l1==0||l2==0){
+        if(l2==0){
+            return haystack;
+        }
+        if(l1==0){
+            return NULL;
+        }
+    }
+    char *ch1,*ch2;
+    
+    while(*haystack&&l1>=l2){
+
+        if(*haystack==*needle){
+            ch1=haystack;
+            ch2=needle;
+            bool flag=true;
+            for(int i=0;i<l2;i++){
+                if(*(ch1+i)!=*(ch2+i)){
+                    flag=false;
+                    break;
+                }
+            }
+            if(flag){
+                return haystack;
+            }
+        }
+        haystack++;
+        l1--;
+    }
+    return NULL;
+}
