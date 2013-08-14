@@ -12,12 +12,22 @@ Your function should return length = 5, and A is now [1,1,2,2,3].
 using namespace std;
 
 int removeDuplicates(int A[], int n) {
-    if(n==0) return 0;
-    int index=1;
-    for(int i=1;i<n;i++){
+    if(n<3) return n;
+    int index=(A[1]==A[0]?2:1);
+    for(int i=index;i<n;i++){
         if(A[i]!=A[i-1]){
             A[index++]=A[i];
+            if(i+1<n&&A[i]==A[++i]){
+                i++;
+            }
         }
     }
     return index;
+}
+
+int main()
+{
+    int A[]={1,1,1,2};
+    cout << removeDuplicates(A,4) << endl;
+    return 0;
 }
