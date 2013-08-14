@@ -3,3 +3,98 @@ Given an array of strings, return all groups of strings that are anagrams.
 
 Note: All inputs will be in lower-case.
 */
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+struct stringNode{
+    int index;
+    int chars[26];
+    stringNode(){
+        for(int i=0;i<26;i++){
+            chars[i]=0;
+        }
+    }
+};
+
+
+class Solution {
+public:
+    vector<string> anagrams(vector<string> &strs) {
+          vector<string>  result;
+      if(strs.size()<2){
+        return result;
+      }
+
+      vector<stringNode> nodes;
+      int i,j;
+      for(i=0;i<strs.size();i++){
+        stringNode temp;
+        temp.index=i;
+        string str=strs[i];
+        for(j=0;j<str.length();j++){
+            temp.chars[str[j]-'a']++;
+        }
+        nodes.push_back(temp);
+      }
+      bool cmp(const stringNode& a,const stringNode& b);
+      sort(nodes.begin(),nodes.end(),cmp);
+      vector<stringNode>::iterator run=nodes.begin()+1;
+      vector<stringNode>::iterator pre=nodes.begin();
+      bool preFlag=false,cmpFlag=false;
+
+      while(run!=nodes.end()){
+         const int* as=run->chars;
+         const int* bs=pre->chars;
+         cmpFlag=false;
+         for(int i=0;i<26;i++){
+            if(as[i]!=bs[i]){
+                cmpFlag=true;
+                break;
+            }
+         }
+         if(!cmpFlag){
+            //equal
+            if(!preFlag){
+                result.push_back(strs[pre->index]);
+                preFlag=true;
+            }
+            result.push_back(strs[run->index]);
+         }else{
+            preFlag=false;
+         }
+         pre++;
+         run++;
+      }
+
+      return result;
+    }
+};
+
+bool cmp(const stringNode& a,const stringNode& b){
+    const int* as=a.chars;
+    const int* bs=b.chars;
+    for(int i=0;i<26;i++){
+        if(as[i]>bs[i]){
+            return false;
+        }else if(as[i]<bs[i]){
+            return true;
+        }
+    }
+    return true;
+}
+int main()
+{
+    Solution so;
+    vector<string> strs;
+    strs.push_back("");
+    strs.push_back("b" );
+    strs.push_back("" );
+
+    so.anagrams(strs);
+
+    cout << "Hello world!" << endl;
+    return 0;
+}
