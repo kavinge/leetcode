@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+#include <string>
+/**
+Given an array of words and a length L, format the text such that each line has exactly L characters and is fully (left and right) justified.
+
+You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces ' ' when necessary so that each line has exactly L characters.
+
+Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line do not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+
+For the last line of text, it should be left justified and no extra space is inserted between words.
+
+For example,
+words: ["This", "is", "an", "example", "of", "text", "justification."]
+L: 16.
+
+Return the formatted lines as:
+
+[
+   "This    is    an",
+   "example  of text",
+   "justification.  "
+]
+Note: Each word is guaranteed not to exceed L in length.
+**/
+
+using namespace std;
+
+vector<string> fullJustify(vector<string> &words, int L) {
+    vector<string> result;
+    int n=words.size();
+    int index=0;
+    while(index<n){
+        int start=index;
+        int length=words[index].size();
+        while(index+1<n&&length+words[index+1].size()+1<=L){
+            length+=(words[index+1].size()+1);
+            index++;
+        }
+        int insert=L-length;
+        int count=index-start;
+        if(count==0) count=1;
+        int average=insert/count;
+        int mod=insert-average*count;
+        string cu;
+        for(int i=start;i<=index;i++){
+            cu.append(words[i]);
+            if(index==n-1){
+                cu.append(i!=index?1:insert,' ');
+                continue;
+            }
+            if(index!=start&&i==index){
+                break;
+            }
+            int blank=average;
+            if(mod>0){
+                blank++;
+                mod--;
+            }
+            if(index!=start&&i!=index){
+                blank++;
+            }
+            cu.append(blank,' ');
+        }
+        result.push_back(cu);
+        index++;
+    }
+
+
+    if(result.size()==0){
+        result.push_back(string(L,' '));
+    }
+    return result;
+}
+
+int main()
+{
+    vector<string> words;
+    words.push_back("Here");
+    words.push_back("is");
+    words.push_back("an");
+    words.push_back("example");
+    words.push_back("of");
+    fullJustify(words,16);
+    cout << "Hello world!" << endl;
+    return 0;
+}
