@@ -4,3 +4,42 @@ Given preorder and inorder traversal of a tree, construct the binary tree.
 Note:
 You may assume that duplicates do not exist in the tree.
 */
+
+#include <iostream>
+#include <vector>
+using namespace std;
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+TreeNode *buildTreeHelper(vector<int> &preorder, int preLeft,int preRight,vector<int> &inorder,int inLeft,int inRight) {
+    int node=preorder[preLeft];
+    int i;
+    for(i=inLeft;i<=inRight;i++){
+        if(inorder[i]==node){
+            break;
+        }
+    }
+    TreeNode* root=new TreeNode(node);
+    int count=i-inLeft;
+    if(count>0){
+        root->left=buildTreeHelper(preorder,preLeft+1,preLeft+count,inorder,inLeft,i-1);
+    }
+    count=inRight-i;
+    if(count>0){
+        root->right=buildTreeHelper(preorder,preRight-count+1,preRight,inorder,i+1,inRight);
+    }
+    return root;
+}
+
+TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder) {
+    if(preorder.size()==0||inorder.size()==0||preorder.size()!=inorder.size()){
+        return NULL;
+    }
+    return buildTreeHelper(preorder,0,preorder.size()-1,inorder,0,inorder.size()-1);
+
+}
+
