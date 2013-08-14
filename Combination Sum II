@@ -15,3 +15,49 @@ A solution set is:
 [2, 6] 
 [1, 1, 6] 
 */
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector<vector<int> > result;
+void sumHelper(vector<int> &candidates,int target,int index,int* select){
+    if(index<0){
+        return;
+    }
+    for(int i=index;i>=0;i--){
+        if(i==index||candidates[i]!=candidates[i+1]){
+            int temp=candidates[i];
+            if(temp>target){
+                continue;
+            }
+            select[i]=1;
+            if(temp==target){
+                vector<int> ans;
+                for(int j=0;j<candidates.size();j++){
+                    if(select[j]){
+                        ans.push_back(candidates[j]);
+                    }
+                }
+                result.push_back(ans);
+            }else{
+                sumHelper(candidates,target-temp,i-1,select);
+            }
+            select[i]=0;
+        }
+    }
+}
+
+vector<vector<int> > combinationSum2(vector<int> &candidates, int target) {
+    result.clear();
+
+    if(candidates.size()==0||target<=0){
+        return result;
+    }
+    sort(candidates.begin(),candidates.end());
+    int* select=new int[candidates.size()]();
+    sumHelper(candidates,target,candidates.size()-1,select);
+    return result;
+
+}
