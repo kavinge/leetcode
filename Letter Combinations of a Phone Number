@@ -1,0 +1,55 @@
+/*
+Given a digit string, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters (just like on the telephone buttons) is given below.
+
+Input:Digit string "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+Note:
+Although the above answer is in lexicographical order, your answer could be in any order you want.
+*/
+
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+char maps[8][4]={{'a','b','c'},{'d','e','f'},{'g','h','i'},
+{'j','k','l'},{'m','n','o'},{'p','q','r','s'},
+{'t','u','v'},{'w','x','y','z'}};
+vector<string> result;
+
+void helper(string &digits,string& now,int index,int size){
+    char current=digits[index];
+    char *possible=maps[current-'2'];
+    for(int i=0;i<4;i++){
+        if(possible[i]!='\0'){
+            now[index]=possible[i];
+            if(index==size-1){
+                result.push_back(now);
+            }else{
+                helper(digits,now,index+1,size);
+            }
+        }
+    }
+}
+
+vector<string> letterCombinations(string digits) {
+    result.clear();
+    int n=digits.size();
+    if(n==0){
+        result.push_back("");
+        return result;
+    }
+    string now(n,'\0');
+    helper(digits,now,0,n);
+    return result;
+
+}
+
+int main()
+{
+    cout <<(maps[0][3]=='\0')<<endl;
+    cout << "Hello world!" << endl;
+    return 0;
+}
