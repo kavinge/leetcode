@@ -1,0 +1,66 @@
+/*
+Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Determine if you are able to reach the last index.
+
+For example:
+A = [2,3,1,1,4], return true.
+
+A = [3,2,1,0,4], return false.
+*/
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+bool canJump(int A[], int n) {
+    if(n<=1){
+        return true;
+    }
+    char* flag=new char[n];
+    memset(flag,0,n);
+    flag[0]='1';
+    for(int i=1;i<n;i++){
+        for(int j=i-1;j>=0;j--){
+            if(A[j]>=i-j&&flag[j]=='1'){
+                flag[i]='1';
+                break;
+            }
+        }
+    }
+    char result=flag[n-1];
+    delete[] flag;
+    return result=='1';
+}
+
+bool canJump2(int A[], int n) {
+    if(n<=1){
+        return true;
+    }
+    int to=A[0];
+    if(to>=n-1){
+        return true;
+    }
+    for(int i=1;i<n;i++){
+        if(i>to){
+            return false;
+        }
+        if(A[i]+i>to){
+            to=A[i]+i;
+            if(to>=n-1){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+int main()
+{
+    int a[2]={2,0};
+    canJump2(a,2);
+    cout << "Hello world!" << endl;
+    return 0;
+}
