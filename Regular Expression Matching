@@ -1,0 +1,52 @@
+/*
+Implement regular expression matching with support for '.' and '*'.
+
+'.' Matches any single character.
+'*' Matches zero or more of the preceding element.
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+isMatch("aa","a") ? false
+isMatch("aa","aa") ? true
+isMatch("aaa","aa") ? false
+isMatch("aa", "a*") ? true
+isMatch("aa", ".*") ? true
+isMatch("ab", ".*") ? true
+isMatch("aab", "c*a*b") ? true
+*/
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+bool helper(const char *s,int i,const char *p,int j){
+    if(i==-1&&j==-1) return true;
+    if(j<0) return false;
+    if(i>=0&&(s[i]==p[j]||p[j]=='.')) return helper(s,i-1,p,j-1);
+    if(p[j]=='*'){
+        if(i<0){
+            return helper(s,i,p,j-2);//0个
+        }else if(j-1>=0&&(p[j-1]==s[i]||p[j-1]=='.')){
+            return helper(s,i,p,j-2)||helper(s,i-1,p,j);//0个或n个
+        }else{
+            return helper(s,i,p,j-2);//0个
+        }
+    }
+    return false;
+}
+
+bool isMatch(const char *s, const char *p) {
+    int ns=strlen(s);
+    int np=strlen(p);
+    return helper(s,ns-1,p,np-1);
+}
+
+int main()
+{
+    cout << isMatch("ab",".*c") << endl;
+    return 0;
+}
