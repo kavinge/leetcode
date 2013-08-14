@@ -11,3 +11,47 @@ Given the below binary tree,
      2   3
 Return 6.
 */
+
+#include <iostream>
+
+using namespace std;
+struct TreeNode {
+     int val;
+     TreeNode *left;
+      TreeNode *right;
+      TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+int maxPathHelper(TreeNode* root, int &sum){
+    if(root==NULL){
+        sum=0;
+        return 0x80000001;
+    }
+    int leftSum=0,rightSum=0;
+
+    int leftMax=maxPathHelper(root->left,leftSum);
+    int rightMax=maxPathHelper(root->right,rightSum);
+    int self=root->val;
+    if(leftSum>0){
+        self+=leftSum;
+    }
+    if(rightSum>0){
+        self+=rightSum;
+    }
+    sum=max(leftSum,rightSum);
+    if(sum>0){
+        sum+=root->val;
+    }else{
+        sum=root->val;
+    }
+    return max(max(leftMax,rightMax),self);
+}
+
+int maxPathSum(TreeNode *root) {
+    if(root==NULL){
+        return 0;
+    }
+    int sum=0;
+    return maxPathHelper(root, sum);
+
+}
