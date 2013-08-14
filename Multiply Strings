@@ -1,0 +1,91 @@
+/*
+Given two numbers represented as strings, return multiplication of the numbers as a string.
+
+Note: The numbers can be arbitrarily large and are non-negative.
+*/
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+string multi(string &num,int a){
+    string result(num.size()+1,'0');
+    int carry=0,cu;
+    for(int i=num.size()-1;i>=0;i--){
+        cu=(num[i]-'0')*a+carry;
+        result[i+1]=(cu%10)+'0';
+        carry=cu/10;
+    }
+    if(carry>0){
+        result[0]='0'+carry;
+    }
+    return result;
+}
+
+void add(string &num1,string &num2){
+    int n1=num1.size();
+    int n2=num2.size();
+    int carry=0,i;
+    for(i=1;i<=n2;i++){
+        int temp1=num1[n1-i]-'0';
+        int temp2=num2[n2-i]-'0';
+        int cu=temp1+temp2+carry;
+        num1[n1-i]=(cu%10)+'0';
+        carry=cu/10;
+    }
+    while(carry>0){
+        int cu=num1[n1-i]-'0'+carry;
+        num1[n1-i]=cu%10+'0';
+        carry=cu/10;
+        i++;
+    }
+}
+
+string multiply(string num1, string num2) {
+    int i;
+    bool isNegtive=false;
+    int n1=num1.size();
+    int n2=num2.size();
+    if(n1>0){
+        if(num1[0]=='-'){
+            isNegtive=!isNegtive;
+            num1.erase(num1.begin());
+            n1--;
+        }
+    }
+    if(n2>0){
+        if(num2[0]=='-'){
+            isNegtive=!isNegtive;
+            num2.erase(num2.begin());
+            n2--;
+        }
+    }
+    if(n1==0||n2==0){
+        return "0";
+    }
+    string result(n1+n2,'0');
+    string temp;
+    for(i=0;i<n1;i++){
+        temp=multi(num2,num1[n1-1-i]-'0');
+        temp.append(i,'0');
+        add(result,temp);
+    }
+    int zero=0;
+    for(i=0;i<result.size()-1;i++){
+        if(result[i]=='0'){
+            zero++;
+        }else{
+            break;
+        }
+    }
+    result.erase(0,zero);
+    if(isNegtive&&(result.size()!=1||result[0]!='0')) result.insert(0,1,'-');
+    return result;
+
+}
+
+int main()
+{
+    cout << multiply("-0","0") << endl;
+    return 0;
+}
