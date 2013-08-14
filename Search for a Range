@@ -1,0 +1,59 @@
+/*
+Given a sorted array of integers, find the starting and ending position of a given target value.
+
+Your algorithm's runtime complexity must be in the order of O(log n).
+
+If the target is not found in the array, return [-1, -1].
+
+For example,
+Given [5, 7, 7, 8, 8, 10] and target value 8,
+return [3, 4].
+*/
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<int> result;
+bool rr=false;
+
+void getBorder(int A[],int left,int right,int target,int status){
+    if(left>right) return ;
+    int middle=(left+right)/2;
+    if(A[middle]==target){
+        result[status]=middle;
+        if(status==0){
+            if(!rr){
+                rr=true;
+                result[1]=middle;
+                getBorder(A,middle+1,right,target,1);
+            }
+            getBorder(A,left,middle-1,target,status);
+        }else{
+             getBorder(A,middle+1,right,target,status);
+        }
+    }else if(A[middle]<target){
+        getBorder(A,middle+1,right,target,status);
+    }else{
+        getBorder(A,left,middle-1,target,status);
+    }
+}
+
+vector<int> searchRange(int A[], int n, int target) {
+    rr=false;
+    result.clear();
+    result.push_back(-1);
+    result.push_back(-1);
+    result[0]=-1;result[1]=-1;
+    if(n==0) return result;
+    getBorder(A,0,n-1,target,0);
+    return result;
+}
+
+int main()
+{
+    int A[]={1,1,2};
+    searchRange(A,3,1);
+    cout << "Hello world!" << endl;
+    return 0;
+}
