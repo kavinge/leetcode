@@ -1,0 +1,58 @@
+/*
+Given a roman numeral, convert it to an integer.
+
+Input is guaranteed to be within the range from 1 to 3999.
+*/
+
+#include <iostream>
+#include <math.h>
+using namespace std;
+
+char ch[7] ={'I','V','X','L','C','D','M'};
+//1、5、10、50、100、500、1000
+
+int helper(int index,string &s,int &i){
+    int count=0;
+    if(index<6){
+        if(s[i]==ch[index]&&i+1<s.size()){
+            //4,9
+            if(s[i+1]==ch[index+1]){
+                i+=2;
+                return 4;
+            }
+            if(s[i+1]==ch[index+2]){
+                i+=2;
+                return 9;
+            }
+        }
+        if(s[i]==ch[index+1]){
+            count+=5;
+            i++;
+        }
+    }
+    while(s[i]==ch[index]){
+        i++;
+        count++;
+    }
+    return count;
+
+}
+
+int romanToInt(string s) {
+    int n=s.size();
+    int result=0;
+    int i=0;
+    int scale=6;
+    while(i<n){
+        int count=helper(scale,s,i);
+        result+=(count*pow(10,scale/2));
+        scale-=2;
+    }
+    return result;
+}
+
+int main()
+{
+    cout << romanToInt("MMMCXCI") << endl;
+    return 0;
+}
