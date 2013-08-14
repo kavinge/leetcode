@@ -13,3 +13,53 @@ A solution set is:
 [7] 
 [2, 2, 3] 
 */
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector<vector<int> > result;
+
+void addToresult(int * select,vector<int> &num){
+    vector<int> temp;
+    for(int i=0;i<num.size();i++){
+        for(int j=0;j<select[i];j++){
+            temp.push_back(num[i]);
+        }
+    }
+    result.push_back(temp);
+}
+
+void sumHelper(vector<int> &nums,int target,int index,int* select){
+    if(index>=nums.size()){
+        return;
+    }
+    int now=nums[index];
+    if(now>target){
+        return;
+    }
+    int count=target/now;
+    for(int i=count;i>=0;i--){
+        select[index]=i;
+        int temp=now*i;
+        if(target==temp){
+            addToresult(select,nums);
+        }else{
+            sumHelper(nums,target-temp,index+1,select);
+        }
+    }
+}
+
+vector<vector<int> > combinationSum(vector<int> &candidates, int target) {
+    result.clear();
+    if(candidates.size()==0||target<=0){
+        return result;
+    }
+    sort(candidates.begin(),candidates.end());
+    int* select=new int[candidates.size()]();
+    sumHelper(candidates,target,0,select);
+    delete[] select;
+    return result;
+
+}
