@@ -1,0 +1,58 @@
+/*
+Given an absolute path for a file (Unix-style), simplify it.
+
+For example,
+path = "/home/", => "/home"
+path = "/a/./b/../../c/", => "/c"
+
+Corner Cases:
+Did you consider the case where path = "/../"?
+In this case, you should return "/".
+Another corner case is the path might contain multiple slashes '/' together, such as "/home//foo/".
+In this case, you should ignore redundant slashes and return "/home/foo".
+*/
+
+#include <iostream>
+#include <stack>
+using namespace std;
+
+void addPath(string path,int n,int i,stack<string> &ps){
+    while(i<n&&path[i]=='/'){i++;};
+    if(i>=n) return ;
+    string temp;
+    while(i<n&&path[i]!='/'){
+        temp.push_back(path[i]);
+        i++;
+    }
+    if(temp.size()!=0) ps.push(temp);
+    addPath(path,n,i,ps);
+}
+
+string simplifyPath(string path) {
+    int n=path.size();
+    stack<string> ps;
+    addPath(path,n,0,ps);
+    string result;
+    int ds=0;
+    while(!ps.empty()){
+        string temp=ps.top();
+        if(temp==".."){
+            ds++;
+        }else if(temp!="."){
+            if(ds>0){
+                ds--;
+            }else{
+                result.insert(0,"/"+temp);
+            }
+        }
+        ps.pop();
+    }
+    if(result.size()==0) result="/";
+    return result;
+}
+
+int main()
+{
+    cout << simplifyPath("/a/./b/../../c/") << endl;
+    return 0;
+}
