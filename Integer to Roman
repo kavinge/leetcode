@@ -1,0 +1,54 @@
+/*
+Given an integer, convert it to a roman numeral.
+
+Input is guaranteed to be within the range from 1 to 3999.
+*/
+
+#include <iostream>
+#include <string>
+using namespace std;
+char ch[7] ={'I','V','X','L','C','D','M'};
+
+//1、5、10、50、100、500、1000
+
+void helper(int count,int index,string &result){
+    if(count==4){
+        result.push_back(ch[index]);
+        result.push_back(ch[index+1]);
+    }else if(count==9){
+        result.push_back(ch[index]);
+        result.push_back(ch[index+2]);
+    }else{
+        if(count>=5){
+            result.push_back(ch[index+1]);
+            count-=5;
+        }
+
+        for(int i=0;i<count;i++){
+            result.push_back(ch[index]);
+        }
+    }
+}
+
+string intToRoman(int num) {
+    if(num==0){
+        return "";
+    }
+    string result="";
+    int thousand=num/1000;
+    int i;
+    for(i=0;i<thousand;i++){
+        result.push_back(ch[6]);
+    }
+    num%=1000;
+    int hundred=num/100;
+    helper(hundred,4,result);
+    num%=100;
+    int ten=num/10;
+    helper(ten,2,result);
+    num%=10;
+    helper(num,0,result);
+    return result;
+
+}
+
