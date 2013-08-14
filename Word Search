@@ -1,0 +1,51 @@
+/**
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+For example,
+Given board =
+
+[
+  ["ABCE"],
+  ["SFCS"],
+  ["ADEE"]
+]
+word = "ABCCED", -> returns true,
+word = "SEE", -> returns true,
+word = "ABCB", -> returns false.
+**/
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+bool helper(vector<vector<char> > &board,int x,int y,string &word,int index){
+    if(index>=word.size()) return true;
+    int m=board.size();
+    if(x<0||x>=m) return false;
+    int n=board[0].size();
+    if(y<0||y>=n) return false;
+    if(word[index]==board[x][y]){
+        char temp=board[x][y];
+        board[x][y]=' ';
+        bool result= helper(board,x,y+1,word,index+1)||helper(board,x+1,y,word,index+1)||helper(board,x-1,y,word,index+1)||helper(board,x,y-1,word,index+1);
+        board[x][y]=temp;
+        return result;
+    }
+    return false;
+}
+
+bool exist(vector<vector<char> > &board, string word) {
+    if(0==word.size()) return true;
+    int m=board.size();
+    if(0==m) return false;
+    int n=board[0].size();
+    if(0==n) return false;
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            if(helper(board,i,j,word,0)) return true;
+        }
+    }
+    return false;
+}
