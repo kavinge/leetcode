@@ -5,3 +5,36 @@ For example, given n = 3, a solution set is:
 
 "((()))", "(()())", "(())()", "()(())", "()()()"
 */
+
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+vector<string> result;
+
+void helper(int left,int right,int index,int n,string& str){
+    if(index==2*n){
+        result.push_back(str);
+        return;
+    }
+    if(left>0){
+        str[index]='(';
+        helper(left-1,right,index+1,n,str);
+    }
+    if(right>0&&left<right){
+        str[index]=')';
+        helper(left,right-1,index+1,n,str);
+    }
+}
+
+vector<string> generateParenthesis(int n) {
+    result.clear();
+    if(n==0){
+        return result;
+    }
+    string str(2*n,' ');
+    helper(n,n,0,n,str);
+    return result;
+}
+
