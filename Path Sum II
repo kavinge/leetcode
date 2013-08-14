@@ -1,0 +1,58 @@
+/*
+Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum.
+
+For example:
+Given the below binary tree and sum = 22,
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \    / \
+        7    2  5   1
+return
+
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+*/
+
+#include <iostream>
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+vector<vector<int> > result;
+
+void preHelper(TreeNode* root,int sum,vector<int>& current,int& total){
+    if(root==NULL){
+        return;
+    }
+    total+=root->val;
+    current.push_back(root->val);
+    if(root->left!=NULL||root->right!=NULL){
+        preHelper(root->left,sum,current,total);
+        preHelper(root->right,sum,current,total);
+    }else{
+        if(total==sum){
+            result.push_back(current);
+        }
+    }
+    current.pop_back();
+    total-=root->val;
+}
+
+vector<vector<int> > pathSum(TreeNode *root, int sum) {
+    result.clear();
+    vector<int> current;
+    int total=0;
+    preHelper(root,sum,current,total);
+    return result;
+}
+
