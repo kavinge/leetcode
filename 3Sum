@@ -11,3 +11,74 @@ The solution set must not contain duplicate triplets.
     (-1, 0, 1)
     (-1, -1, 2)
 */
+#include <iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+vector<vector<int> > threeSum(vector<int> &num) {
+
+        vector<vector<int> > result;
+        if(num.size()<3){
+            return result;
+        }
+        sort(num.begin(),num.end());
+        int i=0,left,right,sum;
+        while(i<=num.size()-3&&num[i]<=0){
+            if(i!=0&&num[i]==num[i-1]){
+                i++;
+                continue;
+            }
+            left=i+1;right=num.size()-1;
+            while(left<right){
+                sum=num[i]+num[left]+num[right];
+                if(sum==0){
+                    vector<int> temp;
+                    temp.push_back(num[i]);
+                    temp.push_back(num[left]);
+                    temp.push_back(num[right]);
+                    cout<<num[i]<<","<<num[left]<<","<<num[right]<<endl;
+                    result.push_back(temp);
+                    if(right-left>1){
+                        do{
+                            left++;
+                        }while(num[left-1]==num[left]&&(right-left>1));
+                        if(num[left-1]==num[left]){
+                            break;
+                        }
+                    }else{
+                        break;
+                    }
+                }else if(sum<0){
+                    if(right-left>1){
+                        left++;
+                    }else{
+                        break;
+                    }
+                }else{
+                    if(right-left>1){
+                        right--;
+                    }else{
+                        break;
+                    }
+                }
+
+            }
+            i++;
+        }
+        return result;
+
+    }
+
+int main()
+{
+    vector<int> num;
+    num.push_back(-1);
+    num.push_back(0);
+    num.push_back(1);
+    num.push_back(2);
+    num.push_back(-1);
+    num.push_back(-4);
+    threeSum(num);
+    cout << "Hello world!" << endl;
+    return 0;
+}
