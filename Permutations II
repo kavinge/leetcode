@@ -1,0 +1,42 @@
+/*
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+For example,
+[1,1,2] have the following unique permutations:
+[1,1,2], [1,2,1], and [2,1,1].
+*/
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector<vector<int> > result;
+
+void helper(vector<int> &current,vector<int> &num,int index,int n){
+    if(index>=n) return;
+    int size=num.size();
+    for(int i=0;i<size;i++){
+        if(i!=0&&num[i-1]==num[i]){
+            continue;
+        }
+        current[index]=num[i];
+        num.erase(num.begin()+i);
+        if(index==n-1){
+            result.push_back(current);
+        }else{
+            helper(current,num,index+1,n);
+        }
+        num.insert(num.begin()+i,current[index]);
+    }
+}
+
+vector<vector<int> > permuteUnique(vector<int> &num) {
+    result.clear();
+    int n=num.size();
+    if(n==0) return result;
+    sort(num.begin(),num.end());
+    vector<int> current(n,0);
+    helper(current,num,0,n);
+    return result;
+}
