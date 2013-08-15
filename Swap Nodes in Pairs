@@ -7,3 +7,30 @@ Given 1->2->3->4, you should return the list as 2->1->4->3.
 Your algorithm should use only constant space. You may not modify the values in the list, only nodes itself can be changed.
 */
 
+class Solution {
+public:
+    
+    ListNode *doSwap(ListNode *first){
+        ListNode *second=first->next;
+        if(second==NULL){
+            return first;
+        }
+        first->next=second->next;
+        second->next=first;
+        return second;
+    }
+    
+    ListNode *swapPairs(ListNode *head) {
+        ListNode *root=NULL,*pre=NULL,*current=head;
+        while(current!=NULL){
+            if(pre==NULL){
+                pre=root=doSwap(current);
+            }else{
+                pre->next=doSwap(current);
+            }
+            pre=current;
+            current=current->next;
+        }
+        return root;
+    }
+};
