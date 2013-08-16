@@ -7,29 +7,26 @@ Divide two integers without using multiplication, division and mod operator.
 using namespace std;
 
 int divide(int aa,int bb){
-    unsigned int a=(unsigned int)aa;
-    unsigned int b=(unsigned int)bb;
+    unsigned int a=aa;
+    unsigned int b=bb;
     int positive=1;
     if(aa<0){
-        positive=-positive;
-        a=-a;
+        positive =- positive;
+        a = -a;
     }
     if(bb<0){
-        positive=-positive;
-        b=-b;
+        positive =- positive;
+        b = -b;
     }
-    if(b==1){
-        return positive==1?a:-a;
-    }
-
-    int result=0,k;
-    unsigned int divisor;
-    while(a>=b){
-        for(k=0,divisor=b;a-divisor>=divisor;divisor<<=1,k++){
-
+    
+    int result=0,t=0;
+    for(; a>>1 >= b; t++) b <<= 1;
+    for(; t >= 0; t--, b >>= 1){    
+        if(a >= b){ 
+            a -= b;
+            result += 1<<t;
         }
-        result+=(1<<k);
-        a-=divisor;
     }
+    
     return positive==1?result:-result;
 }
