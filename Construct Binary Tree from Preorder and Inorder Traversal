@@ -5,41 +5,35 @@ Note:
 You may assume that duplicates do not exist in the tree.
 */
 
-#include <iostream>
-#include <vector>
-using namespace std;
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
 
-TreeNode *buildTreeHelper(vector<int> &preorder, int preLeft,int preRight,vector<int> &inorder,int inLeft,int inRight) {
-    int node=preorder[preLeft];
-    int i;
-    for(i=inLeft;i<=inRight;i++){
-        if(inorder[i]==node){
-            break;
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+ 
+class Solution {
+public:
+    TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder) {
+        TreeNode *root=NULL,**current=&root;
+        stack<TreeNode*> st;
+        int i,j;
+        for(i=j=0;i<preorder.size();i++){
+            *current=new TreeNode(preorder[i]);
+            st.push(*current);
+            current=&((*current)->left);
+            while(!st.empty()&&st.top()->val==inorder[j]){
+                current=&(st.top()->right);
+                st.pop();
+                j++;
+            }
         }
+        return root;
     }
-    TreeNode* root=new TreeNode(node);
-    int count=i-inLeft;
-    if(count>0){
-        root->left=buildTreeHelper(preorder,preLeft+1,preLeft+count,inorder,inLeft,i-1);
-    }
-    count=inRight-i;
-    if(count>0){
-        root->right=buildTreeHelper(preorder,preRight-count+1,preRight,inorder,i+1,inRight);
-    }
-    return root;
-}
-
-TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder) {
-    if(preorder.size()==0||inorder.size()==0||preorder.size()!=inorder.size()){
-        return NULL;
-    }
-    return buildTreeHelper(preorder,0,preorder.size()-1,inorder,0,inorder.size()-1);
-
-}
+};
 
