@@ -26,7 +26,7 @@ bool postOrder(TreeNode *root,int &depth){
             return false;
         }
         depth=(left>right?left:right)+1;
-        return left-right<1&&left-right>-1;
+        return left-right<=1&&left-right>=-1;
 }
 bool isBalanced(TreeNode *root) {
   int depth=0;
