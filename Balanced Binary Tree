@@ -16,7 +16,6 @@ struct TreeNode {
  
 bool postOrder(TreeNode *root,int &depth){
         if(root==NULL){
-            depth=0;
             return true;
         }
         int left=0,right=0;
@@ -26,19 +25,10 @@ bool postOrder(TreeNode *root,int &depth){
         if(!postOrder(root->right,right)){
             return false;
         }
-
         depth=(left>right?left:right)+1;
-
-        if(left-right>1||left-right<-1){
-            return false;
-        }else{
-            return true;
-        }
-    }
-    bool isBalanced(TreeNode *root) {
-        if(root==NULL){
-            return true;
-        }
-        int depth=0;
-        return postOrder(root,depth);
-    }
+        return left-right<1&&left-right>-1;
+}
+bool isBalanced(TreeNode *root) {
+  int depth=0;
+  return postOrder(root,depth);
+}
