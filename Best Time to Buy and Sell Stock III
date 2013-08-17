@@ -12,56 +12,21 @@ You may not engage in multiple transactions at the same time (ie, you must sell 
 using namespace std;
 
 int maxProfit(vector<int> &prices) {
-    if(prices.size()<2)
-       return 0;
-    int result=0;
-    vector<int> left;
-    vector<int> right;
-    int low=prices[0],cur=0;
-    left.push_back(0);
-    for(int i=1;i<prices.size();i++){
-        int temp=prices[i]-low;
-        if(temp>0){
-            if(temp>cur){
-                cur=temp;
-            }
-        }else{
-            low=prices[i];
+        int n=prices.size();
+        if(n<2) return 0;
+        int* dp=new int[n+1]();
+        int highest=prices[n-1];
+        
+        for(int i=n-2;i>0;i--){
+            highest=max(highest,prices[i]);
+            dp[i]=max(dp[i+1],highest-prices[i]);
         }
-        left.push_back(cur);
-    }
-    int high=prices[prices.size()-1];
-    right.push_back(0);
-    cur=0;
-    for(int j=prices.size()-2;j>=0;j--){
-        int temp=high-prices[j];
-        if(temp>0){
-            if(temp>cur){
-                cur=temp;
-            }
-        }else{
-            high=prices[j];
+        int lowest=prices[0];
+        int maxProfit=0;
+        for(int i=1;i<n;i++){
+            lowest=min(lowest,prices[i]);
+            dp[i]=max(dp[i-1],prices[i]-lowest);
+            maxProfit=max(maxProfit,dp[i]+dp[i+1]);
         }
-        right.push_back(cur);
-    }
-
-    for(int k=1;k<prices.size();k++){
-        int temp=left[k];
-        if((prices.size()-k-1)>0){
-            temp+=right[prices.size()-k-1];
-        }
-        if(temp>result){
-            result=temp;
-        }
-    }
-    return result;
-
-}
-int main()
-{
-    vector<int> p;
-    p.push_back(1);
-    p.push_back(2);
-    cout << maxProfit(p) << endl;
-    return 0;
+        return maxProfit;
 }
