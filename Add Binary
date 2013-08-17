@@ -9,46 +9,22 @@ Return "100".
 #include <iostream>
 #include <string>
 using namespace std;
-string addBinary(string a, string b) {
-    string result;
-    int carry=0;
-    int index_a=a.size()-1;
-    int index_b=b.size()-1;
-    int aa,bb;
-    while(index_a>=0&&index_b>=0){
-        aa=a[index_a]-'0';
-        bb=b[index_b]-'0';
-        int temp=aa+bb+carry;
-        carry=temp/2;
-        int ct=temp%2;
-        result.insert(0,1,(ct+'0'));
-        index_a--;
-        index_b--;
-    }
-    while(index_a>=0){
-        aa=a[index_a]-'0';
-        int temp=aa+carry;
-        carry=temp/2;
-        int ct=temp%2;
-        result.insert(0,1,(ct+'0'));
-        index_a--;
-    }
-    while(index_b>=0){
-        bb=b[index_b]-'0';
-        int temp=bb+carry;
-        carry=temp/2;
-        int ct=temp%2;
-        result.insert(0,1,(ct+'0'));
-        index_b--;
-    }
-    if(carry>0){
-        result.insert(0,1,(carry+'0'));
-    }
-    return result;
-}
 
-int main()
-{
-    cout << addBinary("111","001")<< endl;
-    return 0;
-}
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        int la = a.size();
+        int lb = b.size();
+        int i=0,j=0,carry=0;
+        string result;
+        while(i<la||j<lb||carry>0){
+            int sum = carry;
+            sum+=(i<la?a[la-i-1]-'0':0);
+            sum+=(j<lb?b[lb-j-1]-'0':0);
+            result.insert(0,1,(sum&1)+'0');
+            carry=sum>>1;
+            i++;j++;
+        }
+        return result;
+    }
+};
