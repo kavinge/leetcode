@@ -12,46 +12,34 @@ Given the below binary tree,
 Return 6.
 */
 
-#include <iostream>
-
-using namespace std;
-struct TreeNode {
-     int val;
-     TreeNode *left;
-      TreeNode *right;
-      TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-
-int maxPathHelper(TreeNode* root, int &sum){
-    if(root==NULL){
-        sum=0;
-        return 0x80000001;
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int maxPathSum(TreeNode *root) {
+        if(root==NULL) return 0;
+        int sum=0;
+        return dpHelper(root,sum);
     }
-    int leftSum=0,rightSum=0;
-
-    int leftMax=maxPathHelper(root->left,leftSum);
-    int rightMax=maxPathHelper(root->right,rightSum);
-    int self=root->val;
-    if(leftSum>0){
-        self+=leftSum;
-    }
-    if(rightSum>0){
-        self+=rightSum;
-    }
-    sum=max(leftSum,rightSum);
-    if(sum>0){
-        sum+=root->val;
-    }else{
+    int dpHelper(TreeNode* root,int &sum){
+        if(root==NULL){
+            sum=0x80000000;
+            return sum;
+        }
         sum=root->val;
+        int leftSum,rightSum;
+        int left=dpHelper(root->left,leftSum);
+        int right=dpHelper(root->right,rightSum);
+        int maxChild=max(leftSum,rightSum);
+        int minChild=min(leftSum,rightSum);
+        sum+=(maxChild>0?maxChild:0);
+        return max(max(left,right),minChild>0?sum+minChild:sum); 
     }
-    return max(max(leftMax,rightMax),self);
-}
-
-int maxPathSum(TreeNode *root) {
-    if(root==NULL){
-        return 0;
-    }
-    int sum=0;
-    return maxPathHelper(root, sum);
-
-}
+};
