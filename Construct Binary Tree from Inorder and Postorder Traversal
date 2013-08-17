@@ -5,54 +5,34 @@ Note:
 You may assume that duplicates do not exist in the tree.
 */
 
-#include <iostream>
-#include <vector>
-using namespace std;
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
 
-TreeNode *buildTreeHelper(vector<int> &inorder,int inleft,int inright,vector<int> &postorder,int poleft,int poright){
-    if(inright>=inorder.size()||inright-inleft<0){
-        return NULL;
-    }
-    int node=postorder[poright];
-    int i;
-    for(i=inleft;i<=inright;i++){
-        if(inorder[i]==node){
-           break;
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+ 
+class Solution {
+public:
+    TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder) {
+        TreeNode *root=NULL,**current=&root;
+        int i,j;
+        stack<TreeNode*> st;
+        for(i=j=postorder.size()-1;i>=0;i--){
+            *current=new TreeNode(postorder[i]);
+            st.push(*current);
+            current=&((*current)->right);
+            while(!st.empty()&&st.top()->val==inorder[j]){
+                current=&(st.top()->left);
+                st.pop();
+                j--;
+            }
         }
+        return root;
     }
-
-    TreeNode *root=new TreeNode(node);
-    int count=i-inleft;
-    if(count>0){
-            root->left=buildTreeHelper(inorder,inleft,i-1,postorder,poleft,poleft+(count-1));
-    }
-    count=inright-i;
-    if(count>0){
-        root->right=buildTreeHelper(inorder,i+1,inright,postorder,poright-count,poright-1);
-    }
-    return root;
-}
-
-TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder) {
-    if(inorder.size()==0||postorder.size()==0||inorder.size()!=postorder.size()){
-        return NULL;
-    }
-    return buildTreeHelper(inorder,0,inorder.size()-1,postorder,0,postorder.size()-1);
-}
-
-int main()
-{
-    vector<int> inorder;
-    inorder.push_back(-1);
-    vector<int> postorder;
-    postorder.push_back(-1);
-    buildTree(inorder,postorder);
-    cout << "Hello world!" << endl;
-    return 0;
-}
+};
