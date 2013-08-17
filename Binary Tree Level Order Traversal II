@@ -21,61 +21,44 @@ return its bottom-up level order traversal as:
 #include <iostream>
 #include <vector>
 using namespace std;
-struct TreeNode
-{
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
 
-vector<vector<int> > levelOrderBottom(TreeNode *root)
-{
-    vector<vector<int> > result;
-    if(root==NULL)
-    {
+
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int> > levelOrderBottom(TreeNode *root) {
+        vector<vector<int> > result;
+        if(root==NULL) return result;
+        queue<TreeNode* > parent;
+        result.push_back(vector<int>({root->val}));
+        parent.push(root);
+        while(!parent.empty()){
+            int n=parent.size();
+            vector<int> level;
+            for(int i=0;i<n;i++){
+                TreeNode *p=parent.front();
+                if(p->left){
+                    level.push_back(p->left->val);
+                    parent.push(p->left);
+                }
+                if(p->right){
+                    level.push_back(p->right->val);
+                    parent.push(p->right);
+                }
+                parent.pop();
+            }
+            if(level.size()>0)
+                result.insert(result.begin(),level);
+        }
         return result;
+        
     }
-    vector<vector<TreeNode*> > que;
-    int level=0;
-    vector<TreeNode*> temp;
-    temp.push_back(root);
-    que.push_back(temp);
-    while(que.size()>level)
-    {
-        vector<TreeNode*> parent=que[level];
-        vector<TreeNode*> childs;
-        for(int i=0; i<parent.size(); i++)
-        {
-            if(parent[i]->left!=NULL)
-            {
-                childs.push_back(parent[i]->left);
-            }
-            if(parent[i]->right!=NULL)
-            {
-                childs.push_back(parent[i]->right);
-            }
-        }
-        if(childs.size()>0)
-        {
-            que.push_back(childs);
-
-        }
-        level++;
-    }
-
-    for(int i=que.size()-1; i>=0; i--)
-    {
-        vector<TreeNode*> tn=que[i];
-        vector<int> in;
-        for(int j=0; j<tn.size(); j++)
-        {
-            in.push_back(tn[j]->val);
-        }
-        result.push_back(in);
-    }
-
-    return result;
-
-}
-
+};
