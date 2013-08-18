@@ -13,52 +13,23 @@ Given encoded message "12", it could be decoded as "AB" (1 2) or "L" (12).
 The number of ways decoding "12" is 2.
 */
 
-#include <iostream>
-using namespace std;
 
-int helperFibonacci(int k){
-    if(k==0) return 0;
-    if(k==1) return 1;
-    if(k==2) return 2;
-    int n1=1,n2=2;
-    int result;
-    for(int i=3;i<=k;i++){
-        result=n1+n2;
-        n1=n2;
-        n2=result;
-    }
-    return result;
-}
-
-int numDecodings(string s) {
-    if(s.size()==0){
-        return 0;
-    }
-    int count=0;
-    int result=1;
-    for(int i=0;i<s.size();i++){
-        if(s[i]=='0'){
-            if(count==0){
-                return 0;
-            }else{
-                count--;
-                continue;
+class Solution {
+public:
+    //f(n)=f(n-1) if s[n]>0
+    //    +f(n-2) if n>0 && (s[n-1]==1||s[n-1]==2&&s[n]<7
+    int numDecodings(string s) {
+        if(s.length()==0) return 0;
+        int f1=1,f2=1;
+        for(int i=0;i<s.length();i++){
+            int r=0;
+            if(s[i]>'0') r+=f1;
+            if(i>0&&(s[i-1]=='1'||s[i-1]=='2'&&s[i]<'7')){
+                r+=f2;
             }
-
+            f2=f1;
+            f1=r;
         }
-        if(s[i]>'2'||(s[i]=='2'&&(i+1<s.size())&&s[i+1]>'6')){
-            if(count!=0){
-                result*=helperFibonacci(count+1);
-            }
-            count=0;
-            continue;
-        }else{
-            count++;
-        }
+        return f1;
     }
-    if(count!=0){
-        result*=helperFibonacci(count);
-    }
-    return result;
-}
-
+};
