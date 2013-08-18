@@ -11,60 +11,14 @@ For example, given n = 2, return [0,1,3,2]. Its gray code sequence is:
 10 - 2
 */
 
-#include <iostream>
-#include <vector>
-using namespace std;
 
-vector<int> helper(int start,int end){
-    vector<int> temp;
-    if(start>end){
-        temp.push_back(0);
-        return temp;
-    }else if(end-start==0){
-        temp.push_back(0);
-        temp.push_back(1);
-        return temp;
-    }
-    int middle=(start+end)/2;
-    bool addOne=true;
-    if((end-start)&1==1){
-        addOne=false;
-    }else{
-        middle--;
-    }
-    vector<int> t1=helper(start,middle);
-    int multi=1<<(middle-start+1);
-    int i,j;
-    bool begin=true;
-    for(int i=0;i<t1.size();i++){
-        if(begin){
-            for(int j=0;j<t1.size();j++){
-                temp.push_back(t1[i]*multi+t1[j]);
-            }
-            begin=false;
-        }else{
-            for(int j=t1.size()-1;j>=0;j--){
-                temp.push_back(t1[i]*multi+t1[j]);
-            }
-            begin=true;
+class Solution {
+public:
+    vector<int> grayCode(int n) {
+        vector<int> result;
+        for(int i=0;i<(1<<n);i++){
+            result.push_back(i>>1^i);
         }
+        return result;
     }
-    if(addOne){
-        multi=1<<(2*(middle-start+1));
-        for(i=temp.size()-1;i>=0;i--){
-            temp.push_back(multi+temp[i]);
-        }
-    }
-    return temp;
-}
-
-vector<int> grayCode(int n) {
-
-    return helper(1,n);
-}
-
-int main()
-{
-    grayCode(2);
-    return 0;
-}
+};
