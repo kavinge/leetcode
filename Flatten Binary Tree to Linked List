@@ -24,36 +24,26 @@ The flattened tree should look like:
 */
 
 
-#include <iostream>
-using namespace std;
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- };
- 
-TreeNode* helper(TreeNode *root){
-
-    TreeNode* left=root->left;
-    TreeNode* right=root->right;
-    TreeNode* last=root;
-    if(left!=NULL){
-        root->right=left;
-        last=helper(left);
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void flatten(TreeNode *root) {
+        helper(root,NULL);    
     }
-    if(right!=NULL){
-        last->right=right;
-        last=helper(right);
+    TreeNode* helper(TreeNode *root, TreeNode *next){
+        if(root==NULL) return next;
+        next=helper(root->right,next);
+        next=helper(root->left,next);
+        root->left=NULL;
+        root->right=next;
+        return root;
     }
-    root->left=NULL;
-    return last;
-}
-
-void flatten(TreeNode *root) {
-    if(root==NULL){
-        return;
-    }
-    helper(root);
-
-}
+};
