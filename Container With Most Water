@@ -4,58 +4,21 @@ Given n non-negative integers a1, a2, ..., an, where each represents a point at 
 Note: You may not slant the container.
 */
 
-#include <iostream>
-#include <vector>
-using namespace std;
 
-int maxArea(vector<int> &height)
-{
-    if(height.size()<2)
-    {
-        return 0;
+class Solution {
+public:
+    int maxArea(vector<int> &height) {
+        if(height.size()<2) return 0;
+        int left=0,right=height.size()-1;
+        int result=0;
+        while(left<right){
+            result=max(result,(right-left)*min(height[left],height[right]));
+            if(height[left]<height[right]){
+                left++;
+            }else{
+                right--;
+            }
+        }
+        return result;
     }
-    int result=0,left=0,right=0;
-    int i=0,j=height.size()-1;
-
-    while(i<j)
-    {
-
-        if(left>height[i]||height[i]==0)
-        {
-            i++;
-            continue;
-        }
-        else
-        {
-            left=height[i];
-        }
-
-        if(right>height[j]||height[j]==0)
-        {
-            j--;
-            continue;
-        }
-        else
-        {
-            right=height[j];
-        }
-
-        int temp=min(height[i],height[j])*(j-i);
-        if(temp>result)
-        {
-            result=temp;
-        }
-        if(height[i]<height[j])
-        {
-            i++;
-            continue;
-        }
-        else
-        {
-            j--;
-            continue;
-        }
-    }
-
-    return result;
-}
+};
