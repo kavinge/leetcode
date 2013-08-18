@@ -46,3 +46,30 @@ TreeNode *sortedListToBST(ListNode *head) {
     return BSTHelper(head,n);
 }
 
+
+//---------------------------O(n)---------------------------------------------
+class Solution {
+public:
+    TreeNode *sortedListToBST(ListNode *head) {
+        if(head==NULL) return NULL;
+        int n=0;
+        for(ListNode *current=head;current!=NULL;n++,current=current->next);
+        return inorderHelper(head,0,n-1);
+    }
+    
+    TreeNode *inorderHelper(ListNode *&current,int begin,int end){
+        int middle=begin+(end-begin)/2;
+        TreeNode *left=NULL,*right=NULL;
+        if(begin<=middle-1){
+            left=inorderHelper(current,begin,middle-1);
+            current=current->next;    
+        }
+        TreeNode *root=new TreeNode(current->val);
+        if(middle+1<=end){
+            current=current->next;
+            right=inorderHelper(current,middle+1,end);
+        }
+        root->left=left;root->right=right;
+        return root;
+    }
+};
