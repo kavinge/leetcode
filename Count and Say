@@ -31,7 +31,6 @@ string say(string a){
     }
     ss<<count<<last;
     return ss.str();
-
 }
 
 string countAndSay(int n) {
