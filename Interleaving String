@@ -10,57 +10,24 @@ When s3 = "aadbbcbcac", return true.
 When s3 = "aadbbbaccc", return false.
 */
 
-#include <iostream>
-#include <string>
-#include <string.h>
-using namespace std;
 
-bool helper(string &s1,string &s2,string &s3){
-    int n1=s1.size();
-    int n2=s2.size();
-    int n3=s3.size();
-    char **matrix=new char*[n3+1];
-    for(int i=0;i<n3+1;i++){
-        matrix[i]=new char[n1+1];
-        memset(matrix[i],0,n1+1);
-    }
-    matrix[0][0]=1;
-
-    for(int i=1;i<=n3;i++){
-        char c3=s3[i-1];
-        for(int j=0;j<=i&&j<=n1;j++){
-            if(j!=0){
-                char c1=s1[j-1];
-                if(c1==c3){
-                    matrix[i][j]=matrix[i-1][j-1];
-                }
-            }
-            if(matrix[i][j]!=1){
-                if(i-j>0&&i-j<=n2){
-                    char c2=s2[i-j-1];
-                    if(c2==c3){
-                        matrix[i][j]=matrix[i-1][j];
-                    }
-                }
+class Solution {
+public:
+    bool isInterleave(string s1, string s2, string s3) {
+        int n1=s1.length(),n2=s2.length(),n3=s3.length();
+        if(n3!=n1+n2) return false;
+        if(n3==0) return true;
+        bool **dp=new bool*[n3+1];
+        for(int i=0;i<n3+1;i++){
+            dp[i]=new bool[n1+1]();
+        }
+        dp[0][0]=true;
+        for(int i=1;i<=n3;i++){
+            for(int j=max(0,i-n2);j<=i&&j<=n1;j++){
+                if(j>0&&s3[i-1]==s1[j-1]) dp[i][j]=dp[i-1][j-1];
+                if(i-j>0&&s3[i-1]==s2[i-j-1]) dp[i][j]|=dp[i-1][j];
             }
         }
+        return dp[n3][n1];
     }
-    return matrix[n3][n1];
-}
-
-bool isInterleave(string s1, string s2, string s3) {
-    if(s3.size()!=s1.size()+s2.size()){
-        return false;
-    }
-    if(s3.size()==0){
-        return true;
-    }
-    return helper(s1,s2,s3);
-}
-
-int main()
-{
-    isInterleave("a","","a");
-    cout << "Hello world!" << endl;
-    return 0;
-}
+};
