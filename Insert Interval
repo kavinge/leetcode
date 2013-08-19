@@ -12,88 +12,8 @@ Given [1,2],[3,5],[6,7],[8,10],[12,16], insert and merge [4,9] in as [1,2],[3,10
 This is because the new interval [4,9] overlaps with [3,5],[6,7],[8,10].
 */
 
-#include <iostream>
-#include <vector>
-using namespace std;
-struct Interval {
-     int start;
-     int end;
-     Interval() : start(0), end(0) {}
-     Interval(int s, int e) : start(s), end(e) {}
- };
- 
-void findBinaryStart(vector<Interval> &is,int start,int &left,int &right){
-    int middle=(left+right)/2;
-    if(is[middle].start>start){
-        if(middle==left){
-            right=left;
-            left=left-1;
-            return;
-        }else{
-            right=middle-1;
-            findBinaryStart(is,start,left,right);
-        }
-    }else if(is[middle].end<start){
-        if(middle==right){
-            left=right;
-            right=right+1;
-            return;
-        }else{
-            left=middle+1;
-            findBinaryStart(is,start,left,right);
-        }
-    }else{
-        left=middle;
-        right=middle;
-    }
-}
 
-vector<Interval> insert(vector<Interval> &intervals, Interval newInterval) {
-      vector<Interval> result;
-    int size=intervals.size();
-    if(size==0){
-        result.push_back(newInterval);
-        return result;
-    }
-    int startLeft=0,startRight=size-1;
-    findBinaryStart(intervals,newInterval.start,startLeft,startRight);
-    int endLeft=0,endRight=size-1;
-    findBinaryStart(intervals,newInterval.end,endLeft,endRight);
-    int index=0;
-    for(index=0;index<startRight;index++){
-        result.push_back(intervals[index]);
-    }
-
-    for(index=startRight;index<size&&index<=endLeft;index++){
-        if(intervals[index].start<newInterval.start){
-            newInterval.start=intervals[index].start;
-        }
-        if(intervals[index].end>newInterval.end){
-            newInterval.end=intervals[index].end;
-        }
-    }
-    result.push_back(newInterval);
-    for(index=endLeft+1;index<size;index++){
-        result.push_back(intervals[index]);
-    }
-
-    return result;
-}
-
-int main()
-{
-    vector<Interval> s;
-    Interval i(0,5);
-    s.push_back(i);
-    Interval i1(9,12);
-    s.push_back(i1);
-
-    Interval j(7,16);
-    insert(s,j);
-    cout << "Hello world!" << endl;
-    return 0;
-}
-
+//----------------O(logn)---------------
 
 
 /**
@@ -107,6 +27,7 @@ int main()
  */
 class Solution {
 public:
+     
     vector<Interval> insert(vector<Interval> &intervals, Interval newInterval) {
         vector<Interval> result;
         int n=intervals.size();
@@ -114,22 +35,30 @@ public:
             result.push_back(newInterval);
             return result;
         }
-        int start=findPosition(intervals,newInterval.start,0,n-1);
-        int end=findPosition(intervals,newInterval.end,0,n-1);
-        result.insert(result.end(), intervals.begin(), intervals.begin()+start+1);
+        int start_p=findPosition(intervals,newInterval.start,0,n-1);
+        int end_p=findPosition(intervals,newInterval.end,0,n-1);
+        result.insert(result.end(), intervals.begin(), intervals.begin()+start_p+1);
         int left=newInterval.start,right=newInterval.end;
-        for(int i=start+1;i<=end+1)
-        
+        if(end_p+1<n&&intervals[end_p+1].start<=right)
+            end_p++;
+        if(start_p+1>=0&&start_p+1<n)
+            left=min(left,intervals[start_p+1].start);
+        if(end_p>=0&&end_p<n)
+            right=max(right,intervals[end_p].end);
+        result.push_back(Interval(left,right));
+        result.insert(result.end(),intervals.begin()+end_p+1,intervals.end());
+        return result;
     }
-    
-    int findPosition(vector<Interval> &intervals, int val,int start,int end){
-        if(start<end) return min(start,end);
-        int middle=start+(end-start)/2;
+
+    int findPosition(vector<Interval> &intervals, int val,int left,int right){
+        if(left>right) return min(left,right);
+        int middle=left+(right-left)/2;
         if(intervals[middle].end==val) return middle-1;
         if(intervals[middle].end>val){
-            return findPosition(intervals,val,start,middle-1);
+            return findPosition(intervals,val,left,middle-1);
         }else{
-            return findPosition(intervals,val,middle+1,end);
+            return findPosition(intervals,val,middle+1,right);
         }
     }
+
 };
