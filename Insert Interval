@@ -93,3 +93,43 @@ int main()
     cout << "Hello world!" << endl;
     return 0;
 }
+
+
+
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
+class Solution {
+public:
+    vector<Interval> insert(vector<Interval> &intervals, Interval newInterval) {
+        vector<Interval> result;
+        int n=intervals.size();
+        if(n==0){
+            result.push_back(newInterval);
+            return result;
+        }
+        int start=findPosition(intervals,newInterval.start,0,n-1);
+        int end=findPosition(intervals,newInterval.end,0,n-1);
+        result.insert(result.end(), intervals.begin(), intervals.begin()+start+1);
+        int left=newInterval.start,right=newInterval.end;
+        for(int i=start+1;i<=end+1)
+        
+    }
+    
+    int findPosition(vector<Interval> &intervals, int val,int start,int end){
+        if(start<end) return min(start,end);
+        int middle=start+(end-start)/2;
+        if(intervals[middle].end==val) return middle-1;
+        if(intervals[middle].end>val){
+            return findPosition(intervals,val,start,middle-1);
+        }else{
+            return findPosition(intervals,val,middle+1,end);
+        }
+    }
+};
