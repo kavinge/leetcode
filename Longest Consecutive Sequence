@@ -8,46 +8,28 @@ The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4.
 Your algorithm should run in O(n) complexity.
 */
 
-#include <iostream>
-#include <vector>
-#include <hash_map>
-using namespace std;
-//using namespace __gnu_cxx;
-
-int longestConsecutive(vector<int> &num) {
-
-    int n=num.size();
-    if(n==0){
-        return 0;
+class Solution {
+public:
+    int longestConsecutive(vector<int> &num) {
+        unordered_set<int> num_set;
+        for(int i=0;i<num.size();i++){
+            if(num_set.find(num[i])==num_set.end())
+                num_set.insert(num[i]);
+        }
+        int longest=0,current=0;
+        while(num_set.size()>longest){
+            int p=*(num_set.begin()),q=p+1;
+            current=0;
+            while(num_set.find(p)!=num_set.end()){
+                num_set.erase(p--);
+                current++;
+            }
+            while(num_set.find(q)!=num_set.end()){
+                num_set.erase(q++);
+                current++;
+            }
+            longest=max(longest,current);
+        }
+        return longest;
     }
-    __gnu_cxx::hash_map<int,int> maps;
-    int max=0;
-    for(int i=0;i<num.size();i++){
-        maps[num[i]]=i;
-    }
-    for(int i=0;i<num.size();i++){
-        int cu=num[i];
-        if(maps[cu]==-1){
-            continue;
-        }
-        int count=1;
-        int left=cu-1,right=cu+1;
-         __gnu_cxx::hash_map<int,int>::iterator run;
-        while((run=maps.find(left))!=maps.end()){
-            maps[run->first]=-1;
-            count++;
-            left--;
-        }
-        while((run=maps.find(right))!=maps.end()){
-            maps[run->first]=-1;
-            count++;
-            right++;
-        }
-        if(count>max){
-            max=count;
-        }
-    }
-    return max;
-
-}
-
+};
