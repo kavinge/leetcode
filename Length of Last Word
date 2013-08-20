@@ -14,24 +14,19 @@ return 5.
 #include <string.h>
 using namespace std;
 
-int lengthOfLastWord(const char *s) {
-      if(s==NULL){
-        return 0;
-      }
-      int n=strlen(s)-1;
-      int result=0;
-      while(n>=0&&*(s+n)==' '){
-        n--;
-      }
-      while(n>=0&&*(s+n)!=' '){
-        result++;
-        n--;
-      }
-      return result;
-}
 
-int main()
-{
-    cout << lengthOfLastWord("   ") << endl;
-    return 0;
-}
+class Solution {
+public:
+    int lengthOfLastWord(const char *s) {
+        int result=0,current=0;
+        for(;*s;s++){
+            if(*s==' '){
+                current=0;
+            }else{
+                current++;
+                result=current;
+            }
+        }
+        return reuslt;
+    }
+};
