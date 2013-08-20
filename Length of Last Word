@@ -27,6 +27,6 @@ public:
                 result=current;
             }
         }
-        return reuslt;
+        return result;
     }
 };
