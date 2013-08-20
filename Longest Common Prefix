@@ -2,52 +2,22 @@
 Write a function to find the longest common prefix string amongst an array of strings.
 */
 
-#include <iostream>
-#include <vector>
-#include <string>
-using namespace std;
 
-int binary(vector<string> &strs,int minSize,int n){
-    for(int i=0;i<minSize;i++){
-        char c=strs[0][i];
-        for(int j=1;j<n;j++){
-            if(strs[j][i]!=c){
-                return i;
+class Solution {
+public:
+    string longestCommonPrefix(vector<string> &strs) {
+        if(strs.size()==0) return "";
+        int i,j,result=0;
+        for(j=0;j<strs[0].size();j++){
+            char com=strs[0][j];
+            for(i=1;i<strs.size();i++){
+                if(strs[i].size()<=j||strs[i][j]!=com){
+                    break;
+                } 
             }
+            if(i!=strs.size()) break;
+            result++;
         }
+        return strs[0].substr(0,result);
     }
-    return minSize;
-}
-
-string longestCommonPrefix(vector<string> &strs) {
-    int n=strs.size();
-    if(n==0){
-        return "";
-    }
-    int minSize=strs[0].size();
-    for(int i=1;i<n;i++){
-        if(strs[i].size()<minSize){
-            minSize=strs[i].size();
-        }
-    }
-    if(minSize==0){
-        return "";
-    }
-
-    //binary
-    int end=binary(strs,minSize,n);
-    if(end<=0){
-        return "";
-    }
-
-    return strs[0].substr(0,end);;
-}
-
-int main()
-{
-    vector<string> a;
-    a.push_back("a");
-
-    cout << longestCommonPrefix(a)<< endl;
-    return 0;
-}
+};
