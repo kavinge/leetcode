@@ -20,67 +20,50 @@ There exist two distinct solutions to the 4-queens puzzle:
 ]
 */
 
-#include <iostream>
-#include <vector>
-using namespace std;
+class Solution {
+public:
+    vector<vector<string> >result;
 
-vector<vector<string> >result;
-
-bool isValidate(int *current,int index,int val){
-    for(int i=0;i<index;i++){
-        if(current[i]==val-(index-i)||current[i]==val+(index-i)){
-            return false;
+    bool isValidate(int *current,int index,int val){
+        for(int i=0;i<index;i++){
+            if(current[i]==val-(index-i)||current[i]==val+(index-i)){
+                return false;
+            }
         }
+        return true;
     }
-    return true;
-}
-
-void helper(int index,int n,int *current){
-    if(index>=n) return;
-    for(int i=index;i<n;i++){
-        if(isValidate(current,index,current[i])){
-            swap(current[index],current[i]);
-            if(index==n-1){
-               vector<string> ss;
-               for(int i=0;i<n;i++){
-                    string temp(n,'.');
-                    temp[current[i]]='Q';
-                    ss.push_back(temp);
-
-               }
-               result.push_back(ss);
-               return;
-            }else{
-                helper(index+1,n,current);
+    
+    void helper(int index,int n,int *current){
+        if(index>=n) return;
+        for(int i=index;i<n;i++){
+            if(isValidate(current,index,current[i])){
                 swap(current[index],current[i]);
+                if(index==n-1){
+                   vector<string> ss;
+                   for(int i=0;i<n;i++){
+                        string temp(n,'.');
+                        temp[current[i]]='Q';
+                        ss.push_back(temp);
+                   }
+                   result.push_back(ss);
+                   return;
+                }else{
+                    helper(index+1,n,current);
+                    swap(current[index],current[i]);
+                }
             }
         }
     }
-}
 
-vector<vector<string> > solveNQueens(int n) {
-    result.clear();
-    if(n<=0){
+    vector<vector<string> > solveNQueens(int n) {
+        result.clear();
+        int* current=new int[n];
+        for(int i=0;i<n;i++){
+            current[i]=i;
+        }
+        string temp(n,'.');
+        helper(0,n,current);
+        delete[] current;
         return result;
     }
-    int* current=new int[n];
-    for(int i=0;i<n;i++){
-        current[i]=i;
-    }
-    string temp(n,'.');
-    helper(0,n,current);
-    delete[] current;
-    return result;
-}
-
-int main()
-{
-    solveNQueens(8);
-    for(int i=0;i<result.size();i++){
-        for(int j=0;j<result[i].size();j++){
-            cout<<result[i][j]<<endl;
-        }
-    }
-    cout << "Hello world!"<<result.size() << endl;
-    return 0;
-}
+};
