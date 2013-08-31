@@ -11,47 +11,20 @@ Here are some examples. Inputs are in the left-hand column and its corresponding
 1,1,5 → 1,5,1
 */
 
-#include <iostream>
-#include <vector>
-using namespace std;
-#define MAX_NUM 101
-
-void nextPermutation(vector<int> &num) {
-    int n=num.size();
-    if(n<2){
-        return;
-    }
-    int buffer[MAX_NUM]={0};
-    for(int i=n-1;i>=0;i--){
-        buffer[num[i]]++;
-        for(int j=num[i]+1;j<MAX_NUM;j++){
-            if(buffer[j]>0){
-                num[i]=j;
-                buffer[j]--;
-                int index=i+1;
-                for(int k=0;k<MAX_NUM;k++){
-                    for(int m=0;m<buffer[k];m++){
-                        num[index++]=k;
-                    }
+class Solution {
+public:
+    void nextPermutation(vector<int> &num) {
+        int i = num.size() - 2;
+        for(; i>=0; i--){
+            if(num[i]>=num[i+1]) continue;
+            for(int j = num.size()-1; j>i; j--){
+                if(num[j]>num[i]){
+                    swap(num[i],num[j]);
+                    break;
                 }
-                return;
             }
+            break;
         }
+        reverse(num.begin()+i+1,num.end());
     }
-    int i=0;
-    for(int j=0;j<MAX_NUM;j++){
-        for(int k=0;k<buffer[j];k++){
-            num[i++]=j;
-        }
-    }
-}
-
-int main()
-{
-    vector<int> s;
-    s.push_back(1);
-    s.push_back(2);
-    nextPermutation(s);
-    cout << "Hello world!" << endl;
-    return 0;
-}
+};
