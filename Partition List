@@ -8,54 +8,23 @@ Given 1->4->3->2->5->2 and x = 3,
 return 1->2->2->4->3->5.
 */
 
-#include <iostream>
-using namespace std;
-
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
- };
- 
-ListNode *partition(ListNode *head, int x) {
-    ListNode *less=NULL,*lessPre=NULL,*greater=NULL,*greaterPre=NULL;
-    while(head!=NULL){
-        if(head->val<x){
-            if(less==NULL){
-                less=head;
-                lessPre=head;
+class Solution {
+public:
+    ListNode *partition(ListNode *head, int x) {
+        ListNode *lessHead =NULL, **less = &lessHead;
+        ListNode *greaterHead = NULL, **greater = &greaterHead;
+        while(head!=NULL){
+            if(head->val<x){
+                *less = head;
+                less = &((*less)->next);
             }else{
-                lessPre->next=head;
-                lessPre=head;
+                *greater = head;
+                greater = &((*greater)->next);
             }
-        }else{
-            if(greater==NULL){
-                greater=head;
-                greaterPre=head;
-            }else{
-                greaterPre->next=head;
-                greaterPre=head;
-            }
+            head = head->next;
         }
-        head=head->next;
+        if(lessHead) *less = greaterHead;
+        if(greaterHead) *greater = NULL;
+        return lessHead?lessHead:greaterHead;
     }
-    if(greaterPre!=NULL){
-        greaterPre->next=NULL;
-    }
-    if(less==NULL){
-        return greater;
-    }else{
-        lessPre->next=greater;
-        return less;
-    }
-}
-
-int main()
-{
-    ListNode a1(2);
-    ListNode a2(1);
-    a1.next=&a2;
-    partition(&a1,2);
-    cout << "Hello world!" << endl;
-    return 0;
-}
+};
