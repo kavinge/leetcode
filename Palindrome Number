@@ -2,30 +2,15 @@
 Determine whether an integer is a palindrome. Do this without extra space.
 */
 
-#include <iostream>
-#include <math.h>
-using namespace std;
-
-bool isPalindrome(int x) {
-    if(x<0){
-        return false;
-    }
-    int len=1;
-    while((int)(x/pow(10.0,len))){
-        len++;
-    }
-    int i=1;
-    while(i<len){
-        if((int)(x/pow(10.0,i-1))%10!=(int)(x/pow(10.0,len-1))%10){
-            return false;
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if(x<0) return false;
+        int t = 0;
+        for(;int(x/pow(10,t))>0;t++);
+        for(int i=0;i<(t>>1);i++){
+            if((int)(x/pow(10,i))%10 != (int)(x/pow(10,t-1-i))%10) return false;
         }
-        i++;len--;
+        return true;
     }
-    return true;
-}
-
-int main()
-{
-    cout << isPalindrome(2147447412) << endl;
-    return 0;
-}
+};
