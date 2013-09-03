@@ -6,43 +6,24 @@ Given 1->2->3->3->4->4->5, return 1->2->5.
 Given 1->1->1->2->3, return 2->3.
 */
 
-#include <iostream>
-using namespace std;
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
 
-ListNode *deleteDuplicates(ListNode *head) {
-    ListNode *result=NULL;
-    ListNode *pre=NULL;
-    while(head!=NULL){
-        if(head->next==NULL||head->val!=head->next->val){
-            if(pre==NULL){
-                pre=head;
-                result=head;
-            }else{
-                pre->next=head;
-                pre=pre->next;
+class Solution {
+public:
+    ListNode *deleteDuplicates(ListNode *head) {
+        if(head == NULL) return NULL;
+        ListNode *result = NULL, **current = &(result);
+        ListNode *run = head;
+        while(run!=NULL){
+            if(!run->next||run->next->val!=run->val){
+                *current = run;
+                current = &((*current)->next);
             }
-
+            while(run->next&&run->next->val==run->val){
+                run = run->next;
+            }
+            if(run) run = run->next;  
         }
-        while(head->next!=NULL&&head->next->val==head->val){
-            head=head->next;
-        }
-        head=head->next;
+        *current = NULL;
+        return result;  
     }
-    if(pre!=NULL) pre->next=NULL;
-    return result;
-}
-
-int main()
-{
-    ListNode a(1);
-    ListNode b(1);
-    a.next=&b;
-    deleteDuplicates(&a);
-    cout << "Hello world!" << endl;
-    return 0;
-}
+};
