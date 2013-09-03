@@ -2,27 +2,12 @@
 Implement pow(x, n).
 */
 
-#include <iostream>
-
-using namespace std;
 
 double pow(double x, int n) {
     if(n==0) return 1.0;
-    unsigned int nn=(unsigned int)n;
-    if(n<0) nn=-nn;
+    unsigned int nn=(unsigned int)(n<0?-n:n);
     if(nn==1) return n>0?x:(1.0/x);
-    double temp=pow(x,nn/2);
-    temp*=temp;
-    if(n%2==0){
-        return n>0?temp:(1.0/temp);
-    }else{
-        temp*=x;
-        return n>0?temp:(1.0/temp);
-    }
-}
-
-int main()
-{
-    cout << pow(4,-2) << endl;
-    return 0;
+    double half=pow(x,nn/2);
+    double result = n&1 ? half*half*x : half*half;
+    return n>0?result:1.0/result;
 }
