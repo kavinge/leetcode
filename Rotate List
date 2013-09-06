@@ -42,3 +42,21 @@ ListNode *rotateRight(ListNode *head, int k) {
     }
 }
 
+
+
+ListNode *pre = NULL, *result = NULL, *last = head;
+        if(head==NULL||k==0) return head;
+        int n = 1;
+        for(;last->next!=NULL;n++){
+            last = last->next;
+            if(pre) pre = pre->next;
+            else if(n==k+1){
+                pre = head;
+            }
+        }
+        if(k>n) return rotateRight(head, k%n);
+        if(!pre) return head;
+        result = pre->next;
+        last->next = head;
+        pre->next = NULL;
+        return result;
