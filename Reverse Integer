@@ -14,22 +14,16 @@ Did you notice that the reversed integer might overflow? Assume the input is a 3
 Throw an exception? Good, but what if throwing an exception is not an option? You would then have to re-design the function (ie, add an extra parameter).
 */
 
-#include <iostream>
-#include <math.h>
-using namespace std;
-
-int reverse(int x) {
-    long long xx=(long long) x;
-    if(xx<0) xx=-xx;
-
-    long long result=0;
-    for(int i=0;;i++){
-        long long temp=xx/pow(10,i);
-        if(temp==0){
-            break;
+class Solution {
+public:
+    int reverse(int x) {
+        long long xx = x;
+        xx = xx<0?-xx:xx;
+        long long result = 0;
+        while(xx>0){
+            result = result*10 + xx%10;
+            xx/=10;
         }
-        result=result*10+temp%10;
+        return x<0?-(int)result:(int)result;
     }
-    if(x<0) result=-result;
-    return (int)result;
-}
+};
