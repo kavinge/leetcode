@@ -7,19 +7,17 @@ Note:
 You are not suppose to use the library's sort function for this problem.
 */
 
-#include <iostream>
-
-using namespace std;
-
-void sortColors(int A[], int n) {
-    int count[]={0,0,0};
-    for(int i=0;i<n;i++){
-        count[A[i]]++;
+class Solution {
+public:
+    void sortColors(int A[], int n) {
+      int r=0,w=0,b=n-1;
+      for(w=0;w<=b;) {
+        if(A[w]==0)
+          swap(A[r++],A[w++]);
+        else if(A[w]==2)
+          swap(A[b--],A[w]);
+        else
+          w++;
+      }
     }
-    int index=0;
-    for(int i=0;i<3;i++){
-        for(int j=0;j<count[i];j++){
-            A[index++]=i;
-        }
-    }
-}
+};
