@@ -18,36 +18,28 @@ If S = [1,2,2], a solution is:
 ]
 */
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-vector<vector<int> > result;
-
-void dfs(vector<int> &S,int n,int index,int count,vector<int> current){
-    if(count==0){
-        result.push_back(current);
-        return;
-    }
-    if(index+count>n) return;
-    for(int i=index;i<=n-count;i++){
-        if(i!=index&&S[i]==S[i-1]){
-            continue;
+class Solution {
+public:
+    vector<vector<int> > result;
+    vector<int> temp;
+    vector<vector<int> > subsetsWithDup(vector<int> &S) {
+        result.clear();
+        sort(S.begin(),S.end());
+        for(int i=0; i<=S.size(); i++){
+            helper(S,i,0,0);    
         }
-        current.push_back(S[i]);
-        dfs(S,n,i+1,count-1,current);
-        current.pop_back();
+        return result;
     }
-}
-
-vector<vector<int> > subsetsWithDup(vector<int> &S) {
-    result.clear();
-    int n=S.size();
-    sort(S.begin(),S.end());
-    for(int i=0;i<=n;i++){
-        vector<int> temp;
-        dfs(S,n,0,i,temp);
+    void helper(vector<int> &s, int n, int count, int index){
+        if(count==n){
+            result.push_back(temp);
+            return ;
+        }
+        for(int i=index;i<=s.size()-n+count;i++){
+            if(i!=index&&s[i-1]==s[i]) continue;
+            temp.push_back(s[i]);
+            helper(s,n,count+1,i+1);
+            temp.pop_back();
+        }
     }
-    return result;
-}
+};
