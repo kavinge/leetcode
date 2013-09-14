@@ -9,28 +9,20 @@ Your algorithm should use only constant space. You may not modify the values in 
 
 class Solution {
 public:
-    
-    ListNode *doSwap(ListNode *first){
-        ListNode *second=first->next;
-        if(second==NULL){
-            return first;
+    ListNode *swapPairs(ListNode *head) {
+        ListNode *first = NULL, **current = &first;
+        while(head!=NULL&&head->next!=NULL){
+            *current = swap(head);
+            current = &(head->next);
+            head = head->next;
         }
-        first->next=second->next;
-        second->next=first;
-        return second;
+        return first==NULL?head:first;
     }
     
-    ListNode *swapPairs(ListNode *head) {
-        ListNode *root=NULL,*pre=NULL,*current=head;
-        while(current!=NULL){
-            if(pre==NULL){
-                pre=root=doSwap(current);
-            }else{
-                pre->next=doSwap(current);
-            }
-            pre=current;
-            current=current->next;
-        }
-        return root;
+    ListNode *swap(ListNode* first){
+        ListNode * next = first->next;
+        first->next = next->next;
+        next->next = first;
+        return next;
     }
 };
