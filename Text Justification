@@ -24,64 +24,34 @@ Return the formatted lines as:
 Note: Each word is guaranteed not to exceed L in length.
 **/
 
-using namespace std;
-
-vector<string> fullJustify(vector<string> &words, int L) {
-    vector<string> result;
-    int n=words.size();
-    int index=0;
-    while(index<n){
-        int start=index;
-        int length=words[index].size();
-        while(index+1<n&&length+words[index+1].size()+1<=L){
-            length+=(words[index+1].size()+1);
-            index++;
+class Solution {
+public:
+    
+    vector<string> fullJustify(vector<string> &words, int L) {
+        vector<string> result;
+        int i = 0;
+        while(i<words.size()){
+            int j = i+1, l = words[i].length();
+            for(;j<words.size() && l+words[j].length()+1<=L; l+=(words[j++].length()+1));
+            string t = words[i];
+            if(j-i==1){
+                t.append(L-t.length(), ' ');
+            }else if(j==words.size()){
+                for(int k=i+1; k<j; k++){
+                    t += ' ' + words[k];
+                }
+                t.append(L-t.length(), ' ');
+            }else{
+                int avg = (L-l)/(j-i-1);
+                int mod = (L-l)%(j-i-1);
+                for(int k=i+1; k<j; k++){
+                    t.append(avg + (k-i<=mod?1:0) , ' ');
+                    t += ' ' + words[k];
+                }
+            }
+            result.push_back(t);
+            i = j;
         }
-        int insert=L-length;
-        int count=index-start;
-        if(count==0) count=1;
-        int average=insert/count;
-        int mod=insert-average*count;
-        string cu;
-        for(int i=start;i<=index;i++){
-            cu.append(words[i]);
-            if(index==n-1){
-                cu.append(i!=index?1:insert,' ');
-                continue;
-            }
-            if(index!=start&&i==index){
-                break;
-            }
-            int blank=average;
-            if(mod>0){
-                blank++;
-                mod--;
-            }
-            if(index!=start&&i!=index){
-                blank++;
-            }
-            cu.append(blank,' ');
-        }
-        result.push_back(cu);
-        index++;
+        return result;
     }
-
-
-    if(result.size()==0){
-        result.push_back(string(L,' '));
-    }
-    return result;
-}
-
-int main()
-{
-    vector<string> words;
-    words.push_back("Here");
-    words.push_back("is");
-    words.push_back("an");
-    words.push_back("example");
-    words.push_back("of");
-    fullJustify(words,16);
-    cout << "Hello world!" << endl;
-    return 0;
-}
+};
