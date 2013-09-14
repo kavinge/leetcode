@@ -5,68 +5,51 @@ Empty cells are indicated by the character '.'.
 
 You may assume that there will be only one unique solution.
 
-
-
 A sudoku puzzle...
-
-
 
 ...and its solution numbers marked in red.
 */
 
-#include <iostream>
-#include <vector>
-using namespace std;
-
-bool dfs(vector<vector<char> > &board,int *col,int *row,int *matrix,int index)
-{
-    if(index>80) return true;
-    int x=index/9;
-    int y=index%9;
-    if(board[x][y]!='.')
-    {
-        return dfs(board,col,row,matrix,index+1);
-    }
-    for(int i=1; i<10; i++)
-    {
-        int f=(1<<i);
-        int mi=((x/3)*3)+(y/3);
-        if((col[x]&f)==0&&(row[y]&f)==0&&(matrix[mi]&f)==0)
-        {
-            col[x]|=f;
-            row[y]|=f;
-            matrix[mi]|=f;
-            board[x][y]=i+'0';
-            if(dfs(board,col,row,matrix,index+1)) return true;
-            board[x][y]='.';
-            col[x]^=f;
-            row[y]^=f;
-            matrix[mi]^=f;
-        }
-    }
-    return false;
-}
-
-void solveSudoku(vector<vector<char> > &board)
-{
-    int col[9]= {0};
-    int row[9]= {0};
-    int matrix[9]= {0};
-    for(int i=0; i<9; i++)
-    {
-        for(int j=0; j<9; j++)
-        {
-            if(board[i][j]!='.')
-            {
-                int t=board[i][j]-'0';
-                col[i]|=(1<<t);
-                row[j]|=(1<<t);
-                int mi=((i/3)*3)+(j/3);
-                matrix[mi]|=(1<<t);
+class Solution {
+public:
+    void solveSudoku(vector<vector<char> > &board) {
+        int row[9] = {0};
+        int col[9] = {0};
+        int block[9] = {0};
+        
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                if(board[i][j]!='.'){
+                    row[i]|= 1<<(board[i][j]-'0');
+                    col[j]|= 1<<(board[i][j]-'0');
+                    int b = (i/3)*3+(j/3);
+                    block[b]|= 1<<(board[i][j]-'0');
+                }
             }
         }
+        dfs(board,row,col,block,0,0);
     }
-    dfs(board,col,row,matrix,0);
-
-}
-
+    
+    bool dfs(vector<vector<char> > &board, int* row, int* col, int* block, int x, int y){
+        if(x>=9) return true;
+        if(board[x][y]=='.'){
+            for(int t =1; t<=9; t++){
+                int mark = (1<<t);
+                int b = (x/3)*3+(y/3);
+                if((row[x]&mark)==0 && (col[y]&mark)==0 && (block[b]&mark)==0){
+                    board[x][y] = t+'0';
+                    row[x]|=mark;
+                    col[y]|=mark;
+                    block[b]|=mark;
+                    if(dfs(board,row,col,block,y==8?x+1:x,y==8?0:y+1)) return true;
+                    board[x][y]='.';
+                    row[x]^=mark;
+                    col[y]^=mark;
+                    block[b]^=mark;
+                }
+            }
+        }else{
+            return dfs(board,row,col,block,y==8?x+1:x,y==8?0:y+1);
+        }
+    }
+};
