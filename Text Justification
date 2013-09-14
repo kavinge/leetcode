@@ -34,21 +34,17 @@ public:
             int j = i+1, l = words[i].length();
             for(;j<words.size() && l+words[j].length()+1<=L; l+=(words[j++].length()+1));
             string t = words[i];
-            if(j-i==1){
-                t.append(L-t.length(), ' ');
-            }else if(j==words.size()){
-                for(int k=i+1; k<j; k++){
-                    t += ' ' + words[k];
-                }
-                t.append(L-t.length(), ' ');
-            }else{
-                int avg = (L-l)/(j-i-1);
-                int mod = (L-l)%(j-i-1);
-                for(int k=i+1; k<j; k++){
-                    t.append(avg + (k-i<=mod?1:0) , ' ');
-                    t += ' ' + words[k];
-                }
+            int avg = 0 ,mod = 0;
+            if(j<words.size() && j-i>1){
+                avg = (L-l)/(j-i-1);
+                mod = (L-l)%(j-i-1);    
             }
+            for(int k=i+1; k<j; k++){
+                t.append(avg + (k-i<=mod?1:0) , ' ');
+                t += ' ' + words[k];
+            }
+            t.append(L-t.length(), ' ');
+            
             result.push_back(t);
             i = j;
         }
