@@ -19,32 +19,30 @@ X O X X
 
 class Solution {
 public:
-      
-    void dfs(vector<vector<char> > &board,int i,int j,int rows,int columns){
-        if(i<0||i>=rows||j<0||j>=columns||board[i][j]!='O') return;
+    int rows,columns;
+    void dfs(vector<vector<char> > &board,int i,int j){
+        if(i<0 || i>=rows || j<0 || j>=columns || board[i][j]!='O') return;
         board[i][j]='F';
-        dfs(board,i-1,j,rows,columns);
-        dfs(board,i+1,j,rows,columns);
-        dfs(board,i,j-1,rows,columns);
-        dfs(board,i,j+1,rows,columns);
+        dfs(board,i-1,j);
+        dfs(board,i+1,j);
+        dfs(board,i,j-1);
+        dfs(board,i,j+1);
         
     }
     
     void solve(vector<vector<char> > &board) {
-        int rows=board.size();
+        rows=board.size();
         if(rows==0) return;
-        int columns=board[0].size();
+        columns=board[0].size();
         if(columns==0) return;
         for(int j=0;j<columns;j++){
-            dfs(board,0,j,rows,columns);
-            dfs(board,rows-1,j,rows,columns);
-            
+            dfs(board,0,j);
+            dfs(board,rows-1,j);    
         }
         
         for(int i=1;i<rows-1;i++){
-            dfs(board,i,0,rows,columns);
-            dfs(board,i,columns-1,rows,columns);
-            
+            dfs(board,i,0);
+            dfs(board,i,columns-1);
         } 
         
         for(int i=0;i<rows;i++){
