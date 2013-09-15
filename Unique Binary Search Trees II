@@ -11,51 +11,30 @@ Given n = 3, your program should return all 5 unique BST's shown below.
    2     1         2                 3
    **/
 
-#include <iostream>
-#include <vector>
-using namespace std;
-
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- };
- 
 class Solution {
 public:
-
-   vector<TreeNode *> helper(int start,int end){
+    
+    vector<TreeNode *> generateTrees(int n) {
+        return dfs(1,n);
+    }
+    vector<TreeNode*> dfs(int left, int right){
         vector<TreeNode *> result;
-        if(start>end){
+        if(left>right){
             result.push_back(NULL);
             return result;
         }
-        for(int i=start;i<=end;i++){
-
-            vector<TreeNode *> lefts=helper(start,i-1);
-            vector<TreeNode *> rights=helper(i+1,end);
-            for(int l=0;l<lefts.size();l++){
-                for(int r=0;r<rights.size();r++){
-                    TreeNode *head=new TreeNode(i);
-                    head->left=lefts[l];
-                    head->right=rights[r];
-                    result.push_back(head);
+        for(int x=left;x<=right;x++){
+            vector<TreeNode*> lefts = dfs(left,x-1);
+            vector<TreeNode*> rights = dfs(x+1,right);
+            for(int i=0;i<lefts.size();i++){
+                for(int j=0;j<rights.size();j++){
+                    TreeNode * root = new TreeNode(x);
+                    root->left = lefts[i];
+                    root->right = rights[j];
+                    result.push_back(root);
                 }
             }
         }
         return result;
-    }
-    vector<TreeNode *> generateTrees(int n) {
-
-        return helper(1,n);
-    }
+    }    
 };
-
-int main()
-{
-    Solution s;
-    s.generateTrees(3);
-    cout << "Hello world!" << endl;
-    return 0;
-}
