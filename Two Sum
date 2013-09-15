@@ -9,21 +9,16 @@ Input: numbers={2, 7, 11, 15}, target=9
 Output: index1=1, index2=2
 **/
 
-#include <iostream>
-#include <map>
-#include <vector>
-using namespace std;
-
-vector<int> twoSum(vector<int> &numbers, int target) {
-    map<int,int> sub;
-    vector<int> result;
-    for(int i=0;i<numbers.size();i++){
-        if(sub.find(numbers[i])!=sub.end()){
-            result.push_back(sub[numbers[i]]+1);
-            result.push_back(i+1);
-            return result;
-        }else{
-            sub[target-numbers[i]]=i;
+class Solution {
+public:
+    vector<int> twoSum(vector<int> &numbers, int target) {
+        unordered_map<int,int> add_map;
+        for(int i=0;i<numbers.size();i++){
+            if(add_map.find(numbers[i])!=add_map.end()){
+                return vector<int>( {add_map[numbers[i]],i+1} );
+            }
+            add_map[target-numbers[i]] = i+1;
         }
+        
     }
-}
+};
