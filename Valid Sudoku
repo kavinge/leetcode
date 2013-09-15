@@ -7,33 +7,27 @@ The Sudoku board could be partially filled, where empty cells are filled with th
 
 A partially filled sudoku which is valid.
 **/
-#include <iostream>
-#include <vector>
-using namespace std;
 
-bool isValidSudoku(vector<vector<char> > &board) {
-    int m=board.size();
-    if(m!=9) return false;
-    int n=board[0].size();
-    if(n!=9) return false;
-    int col[9]= {0};
-    int row[9]= {0};
-    int matrix[9]= {0};
-    for(int i=0; i<9; i++)
-    {
-        for(int j=0; j<9; j++)
-        {
-            if(board[i][j]!='.')
-            {
-                int t=board[i][j]-'0';
-                int mi=((i/3)*3)+(j/3);
-                if((col[i]&(1<<t))>0||(row[j]&(1<<t))>0||(matrix[mi]&(1<<t))>0) return false;
-                col[i]|=(1<<t);
-                row[j]|=(1<<t);
-
-                matrix[mi]|=(1<<t);
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char> > &board) {
+        int row[9] = {0};
+        int col[9] = {0};
+        int block[9] = {0};
+        
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                if(board[i][j]!='.'){
+                    int mark = 1<<(board[i][j]-'0');
+                    int b = (i/3)*3+(j/3);
+                    if(row[i]&mark || col[j]&mark || block[b]&mark) return false ;
+                    row[i] |= mark; 
+                    col[j] |= mark;
+                    block[b] |= mark;
+                }
             }
         }
+        return true;
     }
-    return true;
-}
+
+};
