@@ -111,3 +111,63 @@ int main()
     cout << findLadders("zings", "brown",dict).size()<<"Hello world!" << endl;
     return 0;
 }
+
+
+
+
+//---------------------------------
+class Solution {
+public:
+    vector<vector<string>> findLadders(string start, string end, unordered_set<string> &dict) {
+        vector<vector<string> > result;
+        unordered_map<string,int> str_lev;
+        unordered_map<string,vector<string> > str_pre;
+        queue<string> level;
+        int count = 1;
+        level.push(start);
+        str_lev[start] = 1;
+        bool isFind = false;
+        while(!isFind && !level.empty()){
+            int count_level = 0;
+            for(int m=0; m<count; m++){
+                string parent  = level.front(), current = parent;
+                int current_level = str_lev[current];
+                level.pop();
+                for(int i=0; i<current.size(); i++){
+                    char recover = current[i];
+                    for(int j=0; j<26; j++){
+                        current[i] = 'a' + j;
+                        if(dict.count(current)>0 && (str_lev[current]==0 || str_lev[current]==current_level+1)){
+                            if(str_lev[current]==0){
+                                str_lev[current] = current_level + 1;
+                                count_level++;
+                                str_pre[current] = vector<string>(1,parent);
+                                level.push(current);
+                            }else{
+                                str_pre[current].push_back(parent);
+                            }
+                            if(current == end){
+                                isFind = true;
+                            }
+                        }
+                    }
+                    current[i] = recover;
+                }
+            }
+            count = count_level;
+        }
+        vector<string> cu(str_lev[end],end);
+        build_path(result, str_pre, cu, end, str_lev[end]-1);
+        return result;
+        
+    }
+    void build_path(vector<vector<string> > &result, unordered_map<string,vector<string> > &str_pre, vector<string> &cu, string target,  int level){
+        if(level < 1) return;
+        vector<string> pres = str_pre[target];
+        for(int i = 0; i<pres.size(); i++){
+            cu[level-1] = pres[i];
+            if(level == 1) result.push_back(cu);
+            else build_path(result, str_pre, cu, cu[level-1], level-1);
+        }
+    }
+};
