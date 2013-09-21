@@ -2,19 +2,23 @@
 Given a number represented as an array of digits, plus one to the number.
 */
 
-#include <iostream>
-#include <vector>
-using namespace std;
-
-vector<int> plusOne(vector<int> &digits) {
-    int n=digits.size();
-    int carry=1;
-    vector<int> result;
-    for(int i=n-1;i>=0;i--){
-        int sum=carry+digits[i];
-        result.insert(result.begin(),sum%10);
-        carry=sum/10;
+class Solution {
+public:
+    vector<int> plusOne(vector<int> &digits) {
+        int n = digits.size();
+        int i = n-1;
+        for(; i>=0&&digits[i]==9; i--){}
+        if(i==-1){
+            vector<int> result(n+1,0);
+            result[0] = 1;
+            return result;
+        }else{
+            vector<int> result(n,0);
+            result[i] = digits[i]+1;
+            for(int j=i-1; j>=0; j--){
+                result[j] = digits[j];
+            }
+            return result;
+        }
     }
-    if(carry>0) result.insert(result.begin(),carry);
-    return result;
-}
+};
