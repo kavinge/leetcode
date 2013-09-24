@@ -13,36 +13,9 @@ Given the below binary tree and sum = 22,
 return true, as there exist a root-to-leaf path 5->4->11->2 which sum is 22.
 */
 
-#include <iostream>
-using namespace std;
-
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-
-bool preHelper(TreeNode* root,int sum,int& total){
-        if(root==NULL){
-            return false;
-        }
-        total+=root->val;
-
-        if(root->left!=NULL||root->right!=NULL){
-            if(preHelper(root->left,sum,total)) return true;
-            if(preHelper(root->right,sum,total)) return true;
-        }else{
-            if(total==sum){
-                return true;
-            }
-        }
-        total-=root->val;
-        return false;
-}
-    
 bool hasPathSum(TreeNode *root, int sum) {
-    int total=0;
-    return preHelper(root,sum,total);
-
+        if(root == NULL) return false;
+        sum -= root->val;
+        if(!root->left && !root->right) return sum==0;
+        return hasPathSum(root->left, sum) || hasPathSum(root->right, sum);
 }
