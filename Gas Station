@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
+        int n = gas.size();
+        int now = 0, start = 0;
+        while(start < n){
+            now = gas[start];
+            for(int i = 1; i<=n; i++){
+                now -= cost[ (start + i-1)%n ];
+                
+                if(now < 0){
+                    start = start + i;
+                    break;
+                }
+                
+                now += gas[(start + i) % n]; 
+            }
+            if(now >= 0)
+                return start;
+        }
+        return -1;
+        
+    }
+};
