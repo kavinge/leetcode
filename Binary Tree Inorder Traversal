@@ -11,30 +11,30 @@ Given binary tree {1,#,2,3},
    3
 */
 
-#include <iostream>
-#include <stack>
-#include <vector>
-using namespace std;
-struct TreeNode {
-      int val;
-      TreeNode *left;
-      TreeNode *right;
-      TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- };
-void inorderHelper(TreeNode *root,vector<int> &result){
-    if(root==NULL){
-        return;
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode *root) {
+        vector<int> inorder;
+        if(root == NULL){
+            return inorder;
+        }
+        stack<TreeNode *> st;
+        st.push(root);
+        TreeNode *run = root;
+        while(!st.empty()){
+            if(run != NULL && run->left){
+                st.push(run->left);
+                run = run->left;
+            }else{
+                run = st.top();
+                st.pop();
+                inorder.push_back(run->val);
+                run = run->right;
+                if(run){
+                    st.push(run);
+                }
+            }
+        }
+        return inorder;
     }
-    inorderHelper(root->left,result);
-    result.push_back(root->val);
-    inorderHelper(root->right,result);
-}
-vector<int> inorderTraversal(TreeNode *root) {
-    vector<int> result;
-    if(root==NULL){
-        return result;
-    }
-    inorderHelper(root,result);
-    return result;
-}
-
+};
