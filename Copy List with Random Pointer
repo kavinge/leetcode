@@ -1,0 +1,37 @@
+/**
+A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
+
+Return a deep copy of the list.
+**/
+
+class Solution {
+public:
+    RandomListNode *copyRandomList(RandomListNode *head) {
+        if(head==NULL) return NULL;
+        RandomListNode *run = head;
+        while(run!=NULL){
+            RandomListNode *new_node = new RandomListNode(run->label);
+            RandomListNode *next = run->next;
+            run->next = new_node;
+            new_node->next = next;
+            run = next;
+        }
+        run = head;
+        RandomListNode *new_head = head->next;
+        while(run!=NULL){
+            if(run->random){
+                run->next->random = run->random->next;
+            }
+            run = run->next->next;
+        }
+        
+        run = head;
+        while(run!=NULL){
+            RandomListNode *next = run->next->next;
+            run->next->next = next == NULL? NULL : next->next;
+            run->next = next;
+            run = next;
+        }
+        return new_head;
+    }
+};
