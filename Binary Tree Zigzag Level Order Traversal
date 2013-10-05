@@ -59,3 +59,51 @@ public:
         return result;
     }
 };
+
+
+// using stack
+
+class Solution {
+public:
+    vector<vector<int> > zigzagLevelOrder(TreeNode *root) {
+        vector<vector<int> > result;
+        bool reverse = false;
+        if(root == NULL) return result;
+        stack<TreeNode *> st[2];
+        st[reverse].push(root);
+        int count = 1;
+        while(count){
+            vector<int> level(count, 0);
+            TreeNode *cu =NULL;
+            int next = 0;
+            for(int i = 0; i<count ; i++){
+                cu = st[reverse].top();
+                st[reverse].pop();
+                level[i] = cu->val;
+                if(reverse){
+                    if(cu->right){
+                        st[!reverse].push(cu->right);
+                        next++;
+                    }
+                    if(cu->left){
+                        st[!reverse].push(cu->left);
+                        next++;
+                    }
+                }else{
+                    if(cu->left){
+                        st[!reverse].push(cu->left);
+                        next++;
+                    }
+                    if(cu->right){
+                        st[!reverse].push(cu->right);
+                        next++;
+                    }
+                }
+            }
+            count = next;
+            reverse = !reverse;
+            result.push_back(level);
+        }
+        return result;
+    }
+};
