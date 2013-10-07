@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<string> wordBreak(string s, unordered_set<string> &dict) {
+        int n = s.length();
+        vector<vector<bool> > dic(n, vector<bool>(n, false));
+        for(int i=0; i<n; i++){
+            for(int j = i; j<n; j++){
+                if(dict.count(s.substr(i, j-i+1))){
+                    dic[i][j] = true;
+                }
+            }
+        }
+        vector<vector<int> > dp(n+1, vector<int>());
+        dp[0].push_back(-1);
+        for(int i = 1; i<=n; i++){
+            for(int j = 0; j<i; j++){
+                if(dp[j].size() && dic[j][i-1]){
+                    dp[i].push_back(j);
+                }
+            }
+        }
+        vector<string> result;
+        string cu;
+        createResult(result, dp, s, cu, n);
+        return result;
+    }
+    
+    void createResult(vector<string> &result, vector<vector<int> > &dp, string &s, string &cu, int split){
+        if(split <= 0){
+            result.push_back(cu.substr(1, cu.length()-1) );
+            return;
+        }
+        for(int i=0; i<dp[split].size(); i++){
+            string cu_copy = " " + s.substr(dp[split][i], split - dp[split][i]) + cu;
+            createResult(result, dp, s, cu_copy, dp[split][i]);
+        }
+    }
+};
