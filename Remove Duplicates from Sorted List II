@@ -10,20 +10,18 @@ Given 1->1->1->2->3, return 2->3.
 class Solution {
 public:
     ListNode *deleteDuplicates(ListNode *head) {
-        if(head == NULL) return NULL;
-        ListNode *result = NULL, **current = &(result);
-        ListNode *run = head;
-        while(run!=NULL){
-            if(!run->next||run->next->val!=run->val){
-                *current = run;
-                current = &((*current)->next);
+        ListNode * head_new = NULL, **cu = &head_new;
+        while(head != NULL){
+            int val = head->val;
+            if(head->next == NULL || head->next->val != val){
+                *cu = head;
+                cu = &((*cu)->next);
             }
-            while(run->next&&run->next->val==run->val){
-                run = run->next;
+            while(head->next != NULL && head->next->val == val){
+                head = head->next;
             }
-            if(run) run = run->next;  
+            head = head->next;
         }
-        *current = NULL;
-        return result;  
+        *cu = NULL;
+        return head_new;
     }
-};
