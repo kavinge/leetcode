@@ -60,3 +60,40 @@ public:
         
     }
 };
+
+
+
+
+
+
+// recursive algorithm
+class Solution {
+public:
+    
+    int n;
+    bool isScramble(string s1, string s2) {
+        n = s1.length();
+        if(s2.length() != n) return false;
+        vector<vector<vector<char> > > dp(n, vector<vector<char> >(n, vector<char>(n+1, '0')));
+        return helper(s1, 0, s2, 0, n, dp);
+    }
+    
+    bool helper(string &s1, int i1, string &s2, int i2, int l, vector<vector<vector<char> > > &dp){
+        if(dp[i1][i2][l] == '0'){
+            if(s1.substr(i1, l) == s2.substr(i2, l)){
+                dp[i1][i2][l] = '1';
+                return true;
+            }
+            for(int i = 1; i<l; i++){
+                if(helper(s1, i1, s2, i2, i, dp) && helper(s1, i1 + i, s2, i2+i, l-i, dp) 
+                || helper(s1, i1, s2, i2+l-i, i, dp) && helper(s1, i1+i, s2, i2, l-i, dp) ){
+                    dp[i1][i2][l] = '1';
+                    break;
+                }
+                dp[i1][i2][l] = '2';
+            }
+        }
+        return dp[i1][i2][l] == '1';
+        
+    }
+};
