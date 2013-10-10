@@ -16,34 +16,31 @@ If there are multiple such windows, you are guaranteed that there will always be
 class Solution {
 public:
     string minWindow(string S, string T) {
-        unordered_map<char,int> targets;
-        queue<int> is;
-        for(int i = 0; i < T.length();i++){
-            targets[T[i]] = 0;
+        int sn = S.length(), tn = T.length();
+        unordered_map<char, int> chars;
+        for(int i = 0; i< tn; i++){
+            chars[T[i]] ++;
         }
-        for(int i = 0; i < T.length();i++){
-            targets[T[i]] ++;
-        }
-        int count = 0,start,window = 0x7fffffff,result_start=-1;
-        for(int i = 0; i < S.length(); i++){
-            if(targets.find(S[i]) != targets.end()){
-                is.push(i);
-                if((--targets[S[i]]) >= 0){
-                    count++;
-                }
-                if(count<T.length()) continue;
-                while(!is.empty()){
-                    start = is.front();
-                    if(targets[S[start]] == 0) break;
-                    targets[S[start]]++;
-                    is.pop();
-                }
-                if(i-start+1<window){
-                    result_start = start;
-                    window = i-start+1;
+        int count = tn, from = -1, min_length = sn + 1;
+        queue<int> index;
+        
+        for(int i = 0; i<sn; i++){
+            index.push(i);
+            if(--chars[S[i]] >= 0){
+                if(!--count && ++count){
+                    int start;
+                    while(chars[S[index.front()]] <= 0){
+                        start = index.front();
+                        chars[S[start]] ++;
+                        index.pop();
+                    }
+                    if(min_length > i - start + 1){
+                        min_length = i - start + 1;
+                        from = start;
+                    }
                 }
             }
         }
-        return result_start==-1?"":S.substr(result_start,window);
+        return from == -1 ? "" : S.substr(from, min_length);
     }
 };
