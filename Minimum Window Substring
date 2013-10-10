@@ -31,8 +31,8 @@ public:
                     int start;
                     while(!index.empty() && chars[S[index.front()]] <= 0){
                         start = index.front();
-                        chars[S[start]] ++;
                         index.pop();
+                        if(++ chars[S[start]] == 1) break;
                     }
                     if(min_length > i - start + 1){
                         min_length = i - start + 1;
