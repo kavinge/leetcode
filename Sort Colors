@@ -10,14 +10,15 @@ You are not suppose to use the library's sort function for this problem.
 class Solution {
 public:
     void sortColors(int A[], int n) {
-      int r=0,w=0,b=n-1;
-      for(w=0;w<=b;) {
-        if(A[w]==0)
-          swap(A[r++],A[w++]);
-        else if(A[w]==2)
-          swap(A[b--],A[w]);
-        else
-          w++;
-      }
+        int zero = 0, one = 0, two = n-1;
+        while(one <= two){
+            if(A[one] == 0){
+                swap(A[zero ++], A[one ++]);
+            }else if(A[one] == 2){
+                swap(A[two --], A[one]);
+            }else{
+                one ++;
+            }
+        }
     }
 };
