@@ -29,7 +29,7 @@ public:
             if(--chars[S[i]] >= 0){
                 if(!--count && ++count){
                     int start;
-                    while(chars[S[index.front()]] <= 0){
+                    while(!index.empty() && chars[S[index.front()]] <= 0){
                         start = index.front();
                         chars[S[start]] ++;
                         index.pop();
