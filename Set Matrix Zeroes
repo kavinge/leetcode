@@ -38,38 +38,43 @@ void setZeroes(vector<vector<int> > &matrix) {
 }
 //O(1)空间复杂度
 //使用第一行记录是否本列置0
-void setZeroes2(vector<vector<int> > &matrix) {
-    int m=matrix.size();
-    if(m==0) return;
-    int n=matrix[0].size();
-    if(n==0) return;
-    int i,j;bool setZeroForFirstLine=false;
-    for(j=0;j<n;j++){
-        if(matrix[0][j]==0) setZeroForFirstLine=true;
-    }
-    for(i=1;i<m;i++){
-        bool row=false;
-        for(j=0;j<n;j++){
-            if(matrix[i][j]==0){
-                matrix[0][j]=0;
-                row=true;
+class Solution {
+public:
+    void setZeroes(vector<vector<int> > &matrix) {
+        int m = matrix.size();
+        if(m == 0) return;
+        int n = matrix[0].size();
+        if(n == 0) return;
+        
+        bool first_line_zero = false;
+        for(int j = 0; j < n; j++){
+            if(matrix[0][j] == 0){
+                first_line_zero = true;
+                break;
             }
         }
-        if(row){
-            for(j=0;j<n;j++)
-              matrix[i][j]=0;
-        }
-    }
-    for(j=0;j<n;j++){
-        if(matrix[0][j]==0){
-            for(i=1;i<m;i++){
-                matrix[i][j]=0;
+        
+        for(int i = 1; i<m; i++){
+            bool has_zero = false;
+            for(int j = 0; j<n; j++){
+                if(matrix[i][j] == 0){
+                    matrix[0][j] = 0;
+                    has_zero = true;
+                }
+            }
+            for(int j = 0; j<n && has_zero; j++){
+                matrix[i][j] = 0;
             }
         }
-    }
-    if(setZeroForFirstLine){
-        for(j=0;j<n;j++){
-            matrix[0][j]=0;
+        
+        for(int j = 0; j < n; j++){
+            if(matrix[0][j] == 0){
+                for( int i = 1; i<m; i++){
+                    matrix[i][j] = 0;
+                }
+            }
+            if( first_line_zero ) matrix[0][j] = 0;
         }
+        
     }
-}
+};
