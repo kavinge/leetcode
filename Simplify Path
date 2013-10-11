@@ -15,30 +15,24 @@ In this case, you should ignore redundant slashes and return "/home/foo".
 class Solution {
 public:
     string simplifyPath(string path) {
-        int i = 0, p, q;
-        stack<string> paths;
-        
-        while(i<path.length()){
-            if(path[i]=='/'){
-                i++;
-                continue;
+        stack<string> st;
+        int i = 0, n = path.length();
+        while(i<n){
+            int j = ++i;
+            for(; j<n && path[j]!='/'; j++);
+            string p = path.substr(i, j - i);
+            if(p == ".."){
+                if(!st.empty()) st.pop();
+            }else if(p != "." && p != ""){
+                st.push(p);
             }
-            p = i;
-            while(path[i]!='/') q=i++;
-            string temp = path.substr(p, q-p+1);
-            if(temp==".") continue;
-            if(temp==".."){
-                if(!paths.empty()) paths.pop();
-            }
-            else paths.push(temp);
-            
+            i = j;
         }
         string result = "";
-        while(!paths.empty()){
-            result="/"+paths.top()+result;
-            paths.pop();
+        while(!st.empty()){
+            result = "/" + st.top() + result;
+            st.pop();
         }
-        return result.length()==0?"/":result;
-        
+        return result.length() == 0 ? "/" : result; 
     }
 };
