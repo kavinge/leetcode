@@ -3,86 +3,36 @@ Given a string S, find the longest palindromic substring in S. You may assume th
 and there exists one unique longest palindromic substring.
 */
 
-#include <iostream>
-#include <string>
-using namespace std;
-
-string longestPalindrome(string s) {
-    int n=s.size();
-    if(n==0){
-        return s;
+class Solution {
+public:
+    
+    string longestPalindrome(string s) {
+        int longest = 0, start = 0;
+        for(int i = 0; i < s.length(); i++){
+            int left = helper(s, i, i);
+            int len = 1 + (i - left)*2;
+            if(longest < len){
+                longest = len;
+                start = left;
+            }
+            if(i+1 == s.length()) break;
+            left = helper(s, i, i+1);
+            len = (i - left + 1)<<1;
+            if(longest < len){
+                longest = len;
+                start = left;
+            }
+        }
+        return s.substr(start, longest);
     }
-    string result;
-    int max=0;
-    int i,j;
-    int start=-1;
-    int end=-1;
-    for(i=0;i<n;i++){
-        //0--i
-        start=-1;
-        end=-1;
-        int left=0,right=i;
-        while(left<=right){
-            if(s[left]==s[right]){
-                if(start==-1){
-                    start=left;
-                    end=right;
-                }
-            }else{
-                start=-1;
-                end=-1;
-            }
-            left++;right--;
+    
+    int helper(string &s, int x, int y){
+        while(x>=0 && y<s.length() && s[x] == s[y]){
+            x--;
+            y++;
         }
-
-
-        if(start!=-1){
-            if(max<(end-start+1)){
-                max=end-start+1;
-                result=s.substr(start,max);
-                cout<<result<<endl;
-            }
-        }
-
+        return x+1;
     }
-
-    for(i=1;i<n;i++){
-        //i--n-1
-        start=-1;
-        end=-1;
-        if(n-i<=max){
-            break;
-        }
-        int left=i,right=n-1;
-        while(left<=right){
-            if(s[left]==s[right]){
-                if(start==-1){
-                    start=left;
-                    end=right;
-                }
-            }else{
-                start=-1;
-                end=-1;
-            }
-            left++;right--;
-        }
-        if(start!=-1){
-            if(max<(end-start+1)){
-                max=end-start+1;
-                result=s.substr(start,max);
-                cout<<result<<endl;
-            }
-        }
-    }
-
-    return result;
-
-}
-
-int main()
-{
-    string a="abb";
-
-    cout << longestPalindrome("eabcb") << endl;
-    return 0;
-}
+    
+    
+};
