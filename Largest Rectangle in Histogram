@@ -13,15 +13,15 @@ return 10.
 class Solution {
 public:
     int largestRectangleArea(vector<int> &height) {
+        int result = 0;
+        int n = height.size();
         stack<int> st;
-        st.push(-1);
-        int result=0;
-        for(int i=0;i<=height.size();i++){
-            int h=(i<height.size()?height[i]:-1);
-            while(st.top()>=0&&height[st.top()]>h){
-                int currentHeight=height[st.top()];
+        for(int i = 0; i<=n; i++){
+            while(!st.empty() && (i == n || height[st.top()] > height[i])){
+                int h = height[st.top()];
                 st.pop();
-                result=max(result,currentHeight*(i-st.top()-1));
+                int left = st.empty() ? -1 : st.top();
+                result = max(result, (i - left - 1) * h);
             }
             st.push(i);
         }
