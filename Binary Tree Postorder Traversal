@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode *root) {
+        vector<int> result;
+        if(root == NULL) return result;
+        stack<TreeNode *> st;
+        unordered_set<TreeNode *> visited;
+        st.push(root);
+        while(!st.empty()){
+            TreeNode *cu = st.top();
+            if(visited.find(cu) == visited.end()){
+                visited.insert(cu);
+                if(cu->right) st.push(cu->right);
+                if(cu->left) st.push(cu->left);
+            }else{
+                st.pop();
+                result.push_back(cu->val);
+            }
+        }
+        return result;
+    }
+};
