@@ -1,0 +1,28 @@
+/*
+Sort a linked list using insertion sort.
+*/
+class Solution {
+public:
+    ListNode *insertionSortList(ListNode *head) {
+        if(head == NULL) return NULL;
+        ListNode shaobing(INT_MIN);
+        shaobing.next = head;
+        ListNode *current = head->next, *tail = head;
+        while(current != NULL){
+            head = &shaobing;
+            while(head != tail && head->next->val <= current->val){
+                head = head->next;
+            }
+            if(head == tail){
+                tail = current;
+            }else{
+                ListNode *temp = head->next;
+                head->next = current;
+                tail->next = current->next;
+                current->next = temp;
+            }
+            current = tail->next;
+        }
+        return shaobing.next;
+    }
+};
